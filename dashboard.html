@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css" />
+  </head>
+  <body>
+    <header>
+      <button onclick="logout()" class="logout-btn">SAIR</button>
+    </header>
+    <main>
+      <nav>
+        <div class="user-info">
+          <img
+            class="user-avatar"
+            src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png"
+            alt="User Avatar" />
+          <h1 style="color: white">Ronaldo Cuidador</h1>
+        </div>
+        <ul>
+          <li>
+            <button onclick="loadPatients()" class="nav-btn active"><strong>
+              Pacientes</strong>
+            </button>
+          </li>
+          <li>
+            <button onclick="openAgenda()" class="nav-btn"><strong>Agenda</strong></button>
+          </li>
+          <li>
+            <button onclick="openProfile()" class="nav-btn"><strong>Cadastro</button></strong>
+          </li>
+         
+        </ul>
+      </nav>
+
+      <div class="main-content"></div>
+
+      <div class="popup" id="addPatientPopup">
+        <span class="closeButton">X Fechar</span>
+        <h2>Adicionar Paciente</h2>
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" required>
+        <label for="name">NOME:</label>
+        <input type="text" id="name" required>
+        <label for="age">IDADE:</label>
+        <input type="number" id="age" required>
+        <button id="confirmButton">Confirmar</button>
+      </div>
+
+      <button id="addPatientButton" class="floating-button">
+        <span>+</span>
+      </button>
+    </main>
+
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>

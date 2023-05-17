@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>HealthNotes</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./css/style.css">
+	
+<body>
+	<div class="wrapper fadeInDown">
+		<div id="formContent">
+		  <!-- Tabs Titles  -->
+		  <h2 id="login-icon" onclick="showLogin()" class="active"> LOGIN </h2>
+		  <h2 id="signup-icon" onclick="showSignup()" class="inactive underlineHover"> CADASTRAR </h2>
+	  
+		  <!-- Icon -->
+		  <div class="fadeIn first">
+			<img src="assets/logoHN.jpg" id="icon" alt="User Icon" />
+		  </div>
+	  
+		  <!-- Login Form -->
+		  <form action="javascript:void(0);" id="login-form">
+			<input type="text" id="login-email" class="fadeIn second" name="login" placeholder="e-mail">
+			<input type="text" id="login-password" class="fadeIn third" name="login" placeholder="senha">
+			<input type="submit" id="commit" class="fadeIn fourth" value="Entrar">
+		  </form>
+
+		  <!-- Cadastro Form -->
+			<form id="signup-form">
+				<input type="text" id="name" class="fadeIn second" name="nome" placeholder="Nome">
+				<input type="text" id="lastname" class="fadeIn second" name="nome" placeholder="Sobrenome">
+				<input type="text" id="email" class="fadeIn third" name="email" placeholder="E-mail">
+				<input type="text" id="signup-password" class="fadeIn third" name="login" placeholder="Senha">
+				<input type="text" id="signup-password-confirmation" class="fadeIn third" name="login" placeholder="Confirme senha">
+				<input type="submit" id="createUserButton" class="fadeIn fourth" value="Cadastrar">
+			</form>
+	  
+		  <!-- Remind Passowrd -->
+		  <div id="formFooter">
+			<a class="underlineHover" href="#">Esqueceu sua senha?</a>
+		  </div>
+	  
+		</div>
+	  </div>
+</body>
+<script src="./js/script.js"></script>
+</html>

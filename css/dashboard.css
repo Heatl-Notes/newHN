@@ -1,0 +1,225 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: rgba(219, 67, 25, 1);
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: fixed; /* adicionado */
+  right: 0; /* adicionado */
+  top: 0; /* adicionado */
+
+  width: calc(100% - 280px); /* adicionado para ocupar a largura completa */
+  z-index: 1; /* adicionado para ficar acima dos outros elementos */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+nav {
+  padding-top: 60px;
+  background-color: #343a40;
+  height: 100vh;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+}
+
+nav li {
+  margin-bottom: 10px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 1.5rem;
+  color: #f8f9fa;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background-color: rgba(219, 67, 25, 1);
+}
+
+.user-avatar {
+  width: 100px;
+  height: 70px;
+}
+
+main {
+  margin-top: 70px;
+  margin-left: calc(300px + 20px); /* 20px is the padding of the main element */
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+}
+
+.logout-btn {
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  color: #f8f9fa;
+  background-color: #343a40;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.main-content {
+  background-color: rgb(249, 243, 242);
+  width: 1200px;
+  justify-content: center;
+  border: 2px solid rgba(219, 67, 25, 1);
+  padding: 30px;
+  margin: 5px;
+  border-radius: 10px;
+  box-shadow: 0 1px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: minmax(200px, auto);
+  grid-gap: 10px;
+}
+
+.content-card {
+  background-color: rgb(245, 229, 226);
+  width: 900px;
+  justify-content: center;
+  border: 2px solid rgba(219, 67, 25, 1);
+  padding: 30px;
+  margin: 5px;
+  border-radius: 10px;
+  box-shadow: 0 1px;
+}
+
+.patient-card {
+  background-color: rgb(245, 229, 226);
+  width: 300px;
+  height: 200px;
+  justify-content: center;
+  border: 2px solid rgba(219, 67, 25, 1);
+  padding: 30px;
+  margin: 5px;
+  border-radius: 10px;
+  box-shadow: 0 1px;
+  display: grid;
+}
+
+.content-card {
+  background-color: rgb(245, 229, 226);
+  width: 600px;
+  height: 400px;
+  justify-content: center;
+  border: 2px solid rgba(219, 67, 25, 1);
+  padding: 30px;
+  margin: 5px;
+  border-radius: 10px;
+  box-shadow: 0 1px;
+}
+
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(219, 67, 25, 1);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.floating-button span {
+  line-height: 0;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  padding: 90px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+
+.popup label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup input[type="text"],
+.popup input[type="number"] {
+  margin-bottom: 20px;
+  width: 100%;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+
+.popup button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(219, 67, 25, 1);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.closeButton {
+  cursor: pointer;
+  position: absolute;
+  right: 10%;
+  font-size: 20px;
+  background-color: rgba(219, 67, 25, 1);
+  padding: 5px;
+  color: white;
+}
