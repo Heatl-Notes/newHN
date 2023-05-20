@@ -53,10 +53,6 @@ async function loadPatients() {
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;
 
-    novoElemento.addEventListener("click", () => {
-      showPatientProfile(patient);
-    });
-
     main.appendChild(novoElemento);
   });
 }
@@ -91,28 +87,10 @@ async function openAgenda() {
 }
 
 //OPEN PATIENT PROFILE
-function showPatientProfile(patient) {
-  const cpf = patient?.cpf;
-  const name = patient?.name;
-  const age = patient?.age;
-
-  const popupElemento = document.createElement("div");
-  popupElemento.className = "popup";
-  popupElemento.innerHTML = `
-    <span class="closeButton">X Fechar</span>
-    <h2>Dados do Paciente</h2>
-    <h3>CPF: ${cpf}</h3>
-    <h3>Nome: ${name}</h3>
-    <h3>Idade: ${age}</h3>
-    <h3>Outros detalhes do paciente...</h3>
-  `;
-  popupElemento.style.display = "block";
-  document.body.appendChild(popupElemento);
-  const closeButton = popupElemento.querySelector(".closeButton");
-  closeButton.addEventListener("click", () => {
-    popupElemento.remove();
-  });
-}
+const paciente = document.getElementById("paciente"); // substitua "paciente" pelo ID do elemento HTML que representa o paciente
+paciente.addEventListener("click", () => {
+  exibirDadosPaciente(cpf, name, age); // substitua "cpf", "name" e "age" pelos dados reais do paciente
+});
 
 //ADD PATIENTS
 

@@ -1,0 +1,39 @@
+{
+  "patients": [
+    {
+      "cpf": "12345678915",
+      "name": "Victor",
+      "age": "123",
+      "id": 1
+    },
+    {
+      "cpf": "12345678912",
+      "name": "Andrade",
+      "age": "3",
+      "id": 2
+    }
+  ],
+  "clients": [
+    {
+      "cpf": 12345678919,
+      "name": "Juca",
+      "last_name": "Silva",
+      "age": 28,
+      "monthsExperience": 12,
+      "email": "lucas_silva@mails.com",
+      "specialties": ["primeiros socorros", "técnico de enfermagem"],
+      "phone": "9999-99999",
+      "calendar": {
+       
+          
+            "date": "2021-01-01", {
+              {
+                "hour": "08:00",
+                "observation": "teste",
+                "category": "medicine"
+              }
+              
+            }
+          
+  
+}

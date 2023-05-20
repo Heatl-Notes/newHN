@@ -54,6 +54,7 @@ async function loadPatients() {
     novoElemento.innerHTML = innerH;
 
     novoElemento.addEventListener("click", () => {
+      alert("Clicou no paciente: " + patient.name);
       showPatientProfile(patient);
     });
 
@@ -97,7 +98,6 @@ function showPatientProfile(patient) {
   const age = patient?.age;
 
   const popupElemento = document.createElement("div");
-  popupElemento.className = "popup";
   popupElemento.innerHTML = `
     <span class="closeButton">X Fechar</span>
     <h2>Dados do Paciente</h2>
@@ -106,11 +106,21 @@ function showPatientProfile(patient) {
     <h3>Idade: ${age}</h3>
     <h3>Outros detalhes do paciente...</h3>
   `;
+
+  console.log(popupElemento);
+  //document.body.appendChild(popupElemento);
+
+  const profilePatientPopup = document.getElementById("profilePatientPopup");
+  //
+  profilePatientPopup.appendChild(popupElemento);
   popupElemento.style.display = "block";
-  document.body.appendChild(popupElemento);
+  profilePatientPopup.style.display = "block";
+
+  console.log(profilePatientPopup);
+
   const closeButton = popupElemento.querySelector(".closeButton");
   closeButton.addEventListener("click", () => {
-    popupElemento.remove();
+    popupElemento.style.display = "none";
   });
 }
 

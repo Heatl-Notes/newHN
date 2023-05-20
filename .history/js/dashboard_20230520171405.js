@@ -101,13 +101,16 @@ function showPatientProfile(patient) {
   popupElemento.innerHTML = `
     <span class="closeButton">X Fechar</span>
     <h2>Dados do Paciente</h2>
-    <h3>CPF: ${cpf}</h3>
     <h3>Nome: ${name}</h3>
     <h3>Idade: ${age}</h3>
+    <h3>CPF: ${cpf}</h3>
     <h3>Outros detalhes do paciente...</h3>
   `;
-  popupElemento.style.display = "block";
+
+  // Adicionando o novo popup ao corpo da página
   document.body.appendChild(popupElemento);
+
+  // Adicionando um evento de clique no botão de fechar o popup
   const closeButton = popupElemento.querySelector(".closeButton");
   closeButton.addEventListener("click", () => {
     popupElemento.remove();

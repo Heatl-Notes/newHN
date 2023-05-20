@@ -29,23 +29,6 @@
             "hour": "08:00",
             "observation": "teste",
             "category": "medicine"
-          },
-          {
-            "hour": "09:00",
-            "observation": "teste",
-            "category": "medicine"
-          },
-          {
-            "hour": "10:00",
-            "observation": "teste",
-            "category": "medicine"
-          }
-        ],
-        "2021-01-02": [
-          {
-            "hour": "08:00",
-            "observation": "teste",
-            "category": "medicine"
           }
         ]
       }

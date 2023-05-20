@@ -1,5 +1,3 @@
-const globalCourrentClient = loadCurrentClient();
-
 async function loadCurrentClient(user) {
   let userId = 12345678919; //capturando o ID do usuario logado
   let clients = await fetch("http://localhost:3000/clients"); //fetch patients from api
@@ -11,7 +9,7 @@ async function loadCurrentClient(user) {
     }
   });
 
-  return courrentClient;
+  return currentClient;
 }
 /**
  * This file is responsible for the dashboard page
@@ -47,15 +45,11 @@ async function loadPatients() {
   let innerH = "";
   let cpf = 0;
   patientsJson.forEach((patient) => {
-    cpf = patient?.cpf;
+    cpf = patient.cpf;
     innerH = `<h4>Paciente:  ${patient.name} </h4> <br><span>Idade: ${patient.age} </span> <button onclick="deletePatient(${cpf})">excluir</button>`;
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;
-
-    novoElemento.addEventListener("click", () => {
-      showPatientProfile(patient);
-    });
 
     main.appendChild(novoElemento);
   });
@@ -66,11 +60,19 @@ async function loadPatients() {
  */
 
 async function openProfile() {
-  let localCourrentClient = await globalCourrentClient;
-  console.log(localCourrentClient);
+  let userId = 12345678919; //capturando o ID do usuario logado
+  let clients = await fetch("http://localhost:3000/clients"); //fetch patients from api
+  let clientsJson = await clients.json();
+  let courrentClient = null;
+  clientsJson.forEach((client) => {
+    if (client?.cpf == userId) {
+      courrentClient = client;
+    }
+  });
+
   var novoElemento = document.createElement("div");
   novoElemento.className = "profile-card";
-  novoElemento.innerHTML = `<h1>Cuidador</h1><br/><h2>Nome: ${localCourrentClient?.name} </h2><h2>Experiência: ${localCourrentClient.monthsExperience} </h2><h2>CPF:  ${localCourrentClient.cpf}</h2><h2>Telefone: ${localCourrentClient.phone} </h2><h2>Email:  ${localCourrentClient.email}</h2>`;
+  novoElemento.innerHTML = `<h1>Cuidador</h1><br/><h2>Nome: ${courrentClient.name} </h2><h2>Experiência: ${courrentClient.monthsExperience} </h2><h2>CPF:  ${courrentClient.cpf}</h2><h2>Telefone: ${courrentClient.phone} </h2><h2>Email:  ${courrentClient.email}</h2>`;
 
   var main = document.querySelector(".main-content");
   main.innerHTML = "";
@@ -78,8 +80,17 @@ async function openProfile() {
 }
 
 async function openAgenda() {
-  let localCourrentClient = await globalCourrentClient;
-  console.log(await localCourrentClient);
+  let userId = 12345678919; //capturando o ID do usuario logado
+  let clients = await fetch("http://localhost:3000/clients"); //fetch patients from api
+  let clientsJson = await clients.json();
+  let courrentClient = null;
+  clientsJson.forEach((client) => {
+    if (client?.cpf == userId) {
+      courrentClient = client;
+    }
+  });
+
+  console.log(courrentClient.calendar);
 
   var novoElemento = document.createElement("div");
   novoElemento.className = "profile-card";
@@ -88,30 +99,6 @@ async function openAgenda() {
   var main = document.querySelector(".main-content");
   main.innerHTML = "";
   main.appendChild(novoElemento);
-}
-
-//OPEN PATIENT PROFILE
-function showPatientProfile(patient) {
-  const cpf = patient?.cpf;
-  const name = patient?.name;
-  const age = patient?.age;
-
-  const popupElemento = document.createElement("div");
-  popupElemento.className = "popup";
-  popupElemento.innerHTML = `
-    <span class="closeButton">X Fechar</span>
-    <h2>Dados do Paciente</h2>
-    <h3>CPF: ${cpf}</h3>
-    <h3>Nome: ${name}</h3>
-    <h3>Idade: ${age}</h3>
-    <h3>Outros detalhes do paciente...</h3>
-  `;
-  popupElemento.style.display = "block";
-  document.body.appendChild(popupElemento);
-  const closeButton = popupElemento.querySelector(".closeButton");
-  closeButton.addEventListener("click", () => {
-    popupElemento.remove();
-  });
 }
 
 //ADD PATIENTS

@@ -106,8 +106,14 @@ function showPatientProfile(patient) {
     <h3>Idade: ${age}</h3>
     <h3>Outros detalhes do paciente...</h3>
   `;
-  popupElemento.style.display = "block";
+
   document.body.appendChild(popupElemento);
+
+  const profilePatientPopup = document.getElementById("profilePatientPopup");
+  addPatientButton.addEventListener("click", () => {
+    addPatientPopup.style.display = "block";
+  });
+
   const closeButton = popupElemento.querySelector(".closeButton");
   closeButton.addEventListener("click", () => {
     popupElemento.remove();

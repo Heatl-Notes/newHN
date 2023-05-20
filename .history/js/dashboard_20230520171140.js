@@ -54,7 +54,7 @@ async function loadPatients() {
     novoElemento.innerHTML = innerH;
 
     novoElemento.addEventListener("click", () => {
-      showPatientProfile(patient);
+      exibirDetalhesPaciente(patient);
     });
 
     main.appendChild(novoElemento);
@@ -91,23 +91,28 @@ async function openAgenda() {
 }
 
 //OPEN PATIENT PROFILE
-function showPatientProfile(patient) {
-  const cpf = patient?.cpf;
-  const name = patient?.name;
-  const age = patient?.age;
+function exibirDetalhesPaciente(patient) {
+  const cpf = patient.cpf;
+  const name = patient.name;
+  const age = patient.age;
+  // Adicione aqui os outros detalhes do paciente que você deseja exibir
 
+  // Criando o novo elemento de popup
   const popupElemento = document.createElement("div");
   popupElemento.className = "popup";
   popupElemento.innerHTML = `
     <span class="closeButton">X Fechar</span>
     <h2>Dados do Paciente</h2>
-    <h3>CPF: ${cpf}</h3>
     <h3>Nome: ${name}</h3>
     <h3>Idade: ${age}</h3>
+    <h3>CPF: ${cpf}</h3>
     <h3>Outros detalhes do paciente...</h3>
   `;
-  popupElemento.style.display = "block";
+
+  // Adicionando o novo popup ao corpo da página
   document.body.appendChild(popupElemento);
+
+  // Adicionando um evento de clique no botão de fechar o popup
   const closeButton = popupElemento.querySelector(".closeButton");
   closeButton.addEventListener("click", () => {
     popupElemento.remove();

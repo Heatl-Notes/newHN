@@ -186,7 +186,7 @@ main {
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .popup label {
@@ -224,5 +224,4 @@ main {
   background-color: rgba(219, 67, 25, 1);
   padding: 5px;
   color: white;
-  border-radius: 8px;
 }
