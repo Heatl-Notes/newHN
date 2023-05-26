@@ -10,6 +10,7 @@ function login() {
   const emailForm = document.getElementById("login-email").value;
   const passwordForm = document.getElementById("login-password").value;
   sendLogin({
+    name: nameForm,
     email: emailForm,
     passwordForm: passwordForm,
   });
@@ -61,10 +62,9 @@ function createUser() {
     alert("The passwords do not match!");
   else
     create({
-      firstName: document.getElementById("signup-name").value,
-      lastName: document.getElementById("signup-lastname").value,
-      email: document.getElementById("signup-email").value,
-      cpf: document.getElementById("signup-cpf").value,
+      firstName: document.getElementById("name").value,
+      lastName: document.getElementById("lastname").value,
+      email: document.getElementById("email").value,
       password: document.getElementById("signup-password").value,
     });
 }

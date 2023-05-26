@@ -1,10 +1,15 @@
-const globalCourrentClient = loadCurrentClient();
+const courrentClient = loadCurrentClient();
 
 async function loadCurrentClient(user) {
   let userId = 12345678919; //capturando o ID do usuario logado
-  let client = await fetch(`http://localhost:3000/clients/`); //fetch patients from api
-  let clientJson = await client.json();
-  let courrentClient = clientJson[userId];
+  let clients = await fetch("http://localhost:3000/clients"); //fetch patients from api
+  let clientsJson = await clients.json();
+  let courrentClient = null;
+  clientsJson.forEach((client) => {
+    if (client?.cpf == userId) {
+      courrentClient = client;
+    }
+  });
 
   return courrentClient;
 }
@@ -43,14 +48,10 @@ async function loadPatients() {
   let cpf = 0;
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
-    innerH = `<h4>Paciente:  ${patient.name} </h4> <br><span>Idade: ${patient.age} </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+    innerH = `<h4>Paciente:  ${patient.name} </h4> <br><span>Idade: ${patient.age} </span> <button onclick="deletePatient(${cpf})">excluir</button>`;
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;
-
-    novoElemento.addEventListener("click", () => {
-      showPatientProfile(patient);
-    });
 
     main.appendChild(novoElemento);
   });
@@ -61,14 +62,9 @@ async function loadPatients() {
  */
 
 async function openProfile() {
-  closeButton.addEventListener("click", () => {
-    popupElemento.remove();
-  });
-
-  let localCourrentClient = await globalCourrentClient;
   var novoElemento = document.createElement("div");
   novoElemento.className = "profile-card";
-  novoElemento.innerHTML = `<h1>Cuidador</h1><br/><h2>Nome: ${localCourrentClient?.name} </h2><h2>Experiência: ${localCourrentClient.monthsExperience} </h2><h2>CPF:  ${localCourrentClient.cpf}</h2><h2>Telefone: ${localCourrentClient.phone} </h2><h2>Email:  ${localCourrentClient.email}</h2>`;
+  novoElemento.innerHTML = `<h1>Cuidador</h1><br/><h2>Nome: ${courrentClient.name} </h2><h2>Experiência: ${courrentClient.monthsExperience} </h2><h2>CPF:  ${courrentClient.cpf}</h2><h2>Telefone: ${courrentClient.phone} </h2><h2>Email:  ${courrentClient.email}</h2>`;
 
   var main = document.querySelector(".main-content");
   main.innerHTML = "";
@@ -76,113 +72,15 @@ async function openProfile() {
 }
 
 async function openAgenda() {
-  let agendaDiv = document.querySelector(".popup-agenda");
-  agendaDiv.style.display = "block";
+  console.log(courrentClient.calendar);
 
-  let closeAgendaButton = document.querySelector("#close-agenda-button");
-  closeAgendaButton?.addEventListener("click", () => {
-    if (agendaDiv) {
-      agendaDiv.style.display = "none";
-    }
-  });
-
-  //capturing the event elements
-  let dateElement = document.querySelector("#date");
-  let descriptionElement = document.querySelector("#description");
-  let timeElement = document.querySelector("#time");
-
-  //capturing the current client
-  let currentClient = await globalCourrentClient;
-
-  let date = "";
-  let description = "";
-  let time = "";
-
-  dateElement?.addEventListener("input", () => {
-    date = dateElement?.value;
-  });
-  descriptionElement?.addEventListener("input", () => {
-    description = descriptionElement?.value;
-  });
-
-  timeElement?.addEventListener("input", () => {
-    time = timeElement?.value;
-  });
-
-  let typeOfEvent = document.querySelector("#typeOfEvent").value;
-
-  let addEventButton = document.querySelector("#addEventButton");
-  addEventButton?.addEventListener("click", () => {
-    let eventObj = {
-      hour: time,
-      observation: description,
-      category: typeOfEvent,
-    };
-
-    try {
-      addEvent(currentClient, date, eventObj);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // if (currentClient.calendar[date]) {
-    //   console.log(currentClient.calendar[date]);
-    //   currentClient.calendar[date].push(eventObj);
-    // } else {
-    //   currentClient.calendar[date] = [eventObj];
-    // }
-  });
-}
-
-async function addEvent(client, date, event) {
-  let cpf = client.cpf;
-  console.log(cpf);
-  let response = await fetch(`http://localhost:3000/clients?id=${cpf}`);
-  let saida = await response.json();
-
-  const clientJson = saida; //worked
-
-  let calendar = clientJson?.calendar; //capturo o calendario do cliente
-  //1. preciso verificar se ele tem a data ja cadastrada
-  //2. se nao tiver, coloco
-
-  // let response = await fetch(`http://localhost:3000/clients/${cpf}`, {
-  //   method: "PATCH",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     calendar: {
-  //       [date]: event,
-  //     },
-  //   }),
-  // });
-}
-
-//OPEN PATIENT PROFILE
-function showPatientProfile(patient) {
-  const cpf = patient?.cpf;
-  const name = patient?.name;
-  const age = patient?.age;
-
-  const popupElemento = document.createElement("div");
-  popupElemento.className = "popup";
-  popupElemento.innerHTML = `
-    <span class="closeButton">X</span>
-    <h1 class="name-patient-profile">Sr(a) ${name}</h1>
-    <div class=patient-info>
-      <h3>CPF: ${cpf}</h3>
-      <h3>Nome: ${name} COMPLETO?</h3>
-      <h3>Idade: ${age}</h3>
-      <h3>Outros detalhes do paciente...</h3>
-    </div>
-  `;
-  popupElemento.style.display = "block";
-  document.body.appendChild(popupElemento);
-  const closeButton = popupElemento.querySelector(".closeButton");
-  closeButton.addEventListener("click", () => {
-    popupElemento.remove();
-  });
+  var novoElemento = document.createElement("div");
+  novoElemento.className = "profile-card";
+  novoElemento.innerHTML =
+    "<h1>Cuidador</h1><br/><h2>Nome: RONALDO CUIDADOR</h2><h2>Experiência: ESTAGIÁRIO</h2><h2>CPF: </h2><h2>Telefone: </h2><h2>Email: </h2><h2>Endereço: </h2><h2>CEP: </h2>";
+  var main = document.querySelector(".main-content");
+  main.innerHTML = "";
+  main.appendChild(novoElemento);
 }
 
 //ADD PATIENTS
@@ -252,11 +150,6 @@ async function addPatient(cpf, name, age) {
 }
 
 //DELETE PATIENTS
-function deletePatientOnClick(event, cpf) {
-  event.stopPropagation();
-  deletePatient(cpf);
-}
-
 async function deletePatient(cpfToDelete) {
   try {
     // Verificar se o paciente existe antes de excluir

@@ -35,7 +35,6 @@
       </nav>
 
       <div class="main-content"></div>
-     
 
       <div class="popup" id="addPatientPopup">
         <span class="closeButton">X Fechar</span>
@@ -46,28 +45,12 @@
         <input type="text" id="name" required>
         <label for="age">IDADE:</label>
         <input type="number" id="age" required>
-        <button id="confirmButton">CONFIRMAR</button>
+        <button id="confirmButton">Confirmar</button>
       </div>
 
-      <div class="popup-agenda">
-        <h1 class="center-content">AGENDA DE {}</h1>
-        <span id="close-agenda-button" class="closeButton">X</span>
-        <div style="display: flex" class="name-patient-profile">
-            <input class="agenda-input" type="date" id="date" />
-            <input class="agenda-input" type="time" id="time"/>
-            <input class="agenda-input" type="text" id="description" placeholder="Descrição" />
-            <select class="agenda-input" id="typeOfEvent">
-              <option value="alimentacao">Alimentação</option>
-              <option value="remedios">Remédios</option>
-              <option value="atividades">Atividades do dia a dia</option>
-            </select>
-            <div class="button-container">
-              <button id="addEventButton"class="add-button">ADD</button>
-            </div>
+      <div class="popup" id="profilePatientPopup">
+        <span class="closeButton">X Fechar</span>
         </div>
-      </div>
-
-      
 
       <button id="addPatientButton" class="floating-button">
         <span>+</span>

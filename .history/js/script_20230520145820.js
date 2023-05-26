@@ -64,7 +64,7 @@ function createUser() {
       firstName: document.getElementById("signup-name").value,
       lastName: document.getElementById("signup-lastname").value,
       email: document.getElementById("signup-email").value,
-      cpf: document.getElementById("signup-cpf").value,
+      email: document.getElementById("signup-cpf").value,
       password: document.getElementById("signup-password").value,
     });
 }
