@@ -61,11 +61,11 @@ function createUser() {
     alert("The passwords do not match!");
   else
     create({
-      firstName: document.getElementById("signup-name").value,
-      lastName: document.getElementById("signup-lastname").value,
       email: document.getElementById("signup-email").value,
       cpf: document.getElementById("signup-cpf").value,
       password: document.getElementById("signup-password").value,
+      name: document.getElementById("signup-name").value,
+      lastName: document.getElementById("signup-lastname").value,
     });
 }
 async function create(user) {

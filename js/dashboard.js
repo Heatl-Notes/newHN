@@ -2,11 +2,10 @@ const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient(user) {
   let userId = 12345678919; //capturando o ID do usuario logado
-  let client = await fetch(`http://localhost:3000/clients/`); //fetch patients from api
+  let client = await fetch(`http://localhost:3000/clients?id=${userId}`); //fetch patients from api
   let clientJson = await client.json();
-  let courrentClient = clientJson[userId];
 
-  return courrentClient;
+  return clientJson;
 }
 /**
  * This file is responsible for the dashboard page
@@ -138,25 +137,39 @@ async function addEvent(client, date, event) {
   let cpf = client.cpf;
   console.log(cpf);
   let response = await fetch(`http://localhost:3000/clients?id=${cpf}`);
-  let saida = await response.json();
+  const clientJson = await response.json();
 
-  const clientJson = saida; //worked
+  let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
 
-  let calendar = clientJson?.calendar; //capturo o calendario do cliente
-  //1. preciso verificar se ele tem a data ja cadastrada
-  //2. se nao tiver, coloco
+  console.log("HEYYY", clientCalendar);
+  if (date in clientCalendar) {
+    console.log("date already exists in calendar");
+    // A data já existe no calendário, adiciona o evento à lista de eventos dessa data
+    clientCalendar[date].push(event);
+  } else {
+    // A data não existe no calendário, cria a chave e adiciona o evento
+    clientCalendar[date] = [event];
+  }
 
-  // let response = await fetch(`http://localhost:3000/clients/${cpf}`, {
-  //   method: "PATCH",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     calendar: {
-  //       [date]: event,
-  //     },
-  //   }),
-  // });
+  // Atualiza o calendário do cliente no servidor
+  fetch(`http://localhost:3000/clients/${cpf}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      calendar: clientCalendar,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert("Evento adicionado com sucesso!"); //to the user
+      console.log("Calendário atualizado:", data); //to the developer
+    })
+    .catch((error) => {
+      alert("Erro ao atualizar o calendário!"); //to the user
+      console.error("Erro ao atualizar o calendário:", error); //to developer
+    });
 }
 
 //OPEN PATIENT PROFILE
