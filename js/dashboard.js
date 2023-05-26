@@ -29,6 +29,7 @@ buttons.forEach((button) => {
 });
 
 async function loadPatients() {
+  closeAgenda();
   var main = document.querySelector(".main-content");
   main.innerHTML = "";
 
@@ -60,6 +61,7 @@ async function loadPatients() {
  */
 
 async function openProfile() {
+  closeAgenda();
   closeButton.addEventListener("click", () => {
     popupElemento.remove();
   });
@@ -73,6 +75,10 @@ async function openProfile() {
   main.innerHTML = "";
   main.appendChild(novoElemento);
 }
+function closeAgenda() {
+  let agendaDiv = document.querySelector(".popup-agenda");
+  agendaDiv.style.display = "none";
+}
 
 async function openAgenda() {
   let agendaDiv = document.querySelector(".popup-agenda");
@@ -81,7 +87,7 @@ async function openAgenda() {
   let closeAgendaButton = document.querySelector("#close-agenda-button");
   closeAgendaButton?.addEventListener("click", () => {
     if (agendaDiv) {
-      agendaDiv.style.display = "none";
+      closeAgenda();
     }
   });
 
