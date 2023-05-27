@@ -209,6 +209,17 @@ main {
   border: 1px solid #ccc;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  height: auto;
+}
+.events-agenda {
+  margin-top: 15px;
+  border-radius: 10px;
+  background-color: rgba(219, 67, 25, 1);
+  padding: 10px;
+  top: 0;
+  color: white;
+  display: block;
+  height: auto;
 }
 
 .popup label {

@@ -1,4 +1,5 @@
 const globalCourrentClient = loadCurrentClient();
+console.log(globalCourrentClient);
 
 async function loadCurrentClient(user) {
   let userId = 12345678919; //capturando o ID do usuario logado
@@ -80,7 +81,44 @@ function closeAgenda() {
   agendaDiv.style.display = "none";
 }
 
+async function loadEvents() {
+  let localCourrentClient = await globalCourrentClient;
+  let events = localCourrentClient?.calendar;
+  console.log("EVENTS OF A CLIENT: ", events);
+
+  let eventsDiv = document.querySelector(".events-agenda");
+  console.log("Captured event div", eventsDiv);
+  eventsDiv.innerHTML = "";
+
+  for (let date in events) {
+    let eventsOnDate = events[date];
+    console.log("Events on date", eventsOnDate);
+    let eventsOnDateDiv = document.createElement("div");
+    eventsOnDateDiv.className = "events-on-date";
+
+    let dateDiv = document.createElement("div");
+    dateDiv.className = "date";
+    dateDiv.innerHTML = date;
+
+    eventsOnDateDiv.appendChild(dateDiv);
+
+    for (let event of eventsOnDate) {
+      let eventDiv = document.createElement("div");
+      eventDiv.className = "event";
+      eventDiv.innerHTML = `<span class="hour">${event.hour}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
+
+      eventsOnDateDiv.appendChild(eventDiv);
+    }
+
+    eventsDiv.appendChild(eventsOnDateDiv);
+  }
+}
+
 async function openAgenda() {
+  let agendaDivName = document.querySelector("#agendaName");
+  let localCourrentClient = await globalCourrentClient;
+  agendaDivName.innerHTML = `Agenda de ${localCourrentClient?.name}`;
+
   let agendaDiv = document.querySelector(".popup-agenda");
   agendaDiv.style.display = "block";
 
@@ -90,6 +128,8 @@ async function openAgenda() {
       closeAgenda();
     }
   });
+
+  loadEvents(); //here I load the events of a client
 
   //capturing the event elements
   let dateElement = document.querySelector("#date");
@@ -138,16 +178,27 @@ async function openAgenda() {
     // }
   });
 }
+function eventParamsCheck(date, event) {
+  return (
+    date === "" ||
+    event.hour === "" ||
+    event.observation === "" ||
+    event.category === ""
+  );
+}
 
 async function addEvent(client, date, event) {
+  if (eventParamsCheck(date, event)) {
+    alert("Parametros invalidos! Data e/ou horario vazio(s)");
+    return;
+  }
+
   let cpf = client.cpf;
-  console.log(cpf);
   let response = await fetch(`http://localhost:3000/clients?id=${cpf}`);
   const clientJson = await response.json();
 
   let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
 
-  console.log("HEYYY", clientCalendar);
   if (date in clientCalendar) {
     console.log("date already exists in calendar");
     // A data já existe no calendário, adiciona o evento à lista de eventos dessa data
