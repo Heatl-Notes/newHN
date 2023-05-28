@@ -147,6 +147,55 @@ main {
   display: grid;
   cursor: pointer;
 }
+.events-on-date {
+  background-color: rgb(245, 229, 226);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+}
+.delete-event-button {
+  background-color: rgba(219, 67, 25, 1);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  right: 0;
+}
+
+.date {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: white;
+  background-color: rgba(219, 67, 25, 1);
+}
+
+.event {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 5px;
+}
+
+.observation {
+  justify-content: flex-start;
+  margin-right: 10px;
+}
+
+.hour,
+.observation,
+.category {
+  margin-right: 10px;
+  color: black;
+  font-weight: bold;
+}
 
 .content-card {
   background-color: rgb(245, 229, 226);

@@ -1,5 +1,5 @@
+let isEditingAgenda = false;
 const globalCourrentClient = loadCurrentClient();
-console.log(globalCourrentClient);
 
 async function loadCurrentClient(user) {
   let userId = 12345678919; //capturando o ID do usuario logado
@@ -81,24 +81,61 @@ function closeAgenda() {
   agendaDiv.style.display = "none";
 }
 
+async function deleteEventOnClick(event, date) {
+  event.preventDefault();
+  let localCourrentClient = await globalCourrentClient;
+  let events = localCourrentClient?.calendar;
+  delete events[date];
+
+  event.preventDefault();
+
+  const client = await globalCourrentClient; // Obtenha o ID do cliente da maneira adequada
+
+  console.log("DATE", date);
+  const url = `http://localhost:3000/clients/${client?.cpf}/calendar/${date}`;
+  console.log("URL", url);
+
+  fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Evento deletado com sucesso");
+        isEditingAgenda = true;
+        loadEvents();
+        // Realize qualquer ação necessária após a exclusão do evento
+      } else {
+        console.error("Erro ao deletar o evento:", response.statusText);
+        // Lide com o erro de exclusão do evento adequadamente
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao fazer a requisição DELETE:", error);
+      // Lide com o erro de requisição adequadamente
+    });
+
+  console.log(`Excluir evento na data: ${date}`);
+}
+
 async function loadEvents() {
   let localCourrentClient = await globalCourrentClient;
   let events = localCourrentClient?.calendar;
-  console.log("EVENTS OF A CLIENT: ", events);
 
   let eventsDiv = document.querySelector(".events-agenda");
-  console.log("Captured event div", eventsDiv);
   eventsDiv.innerHTML = "";
 
   for (let date in events) {
     let eventsOnDate = events[date];
-    console.log("Events on date", eventsOnDate);
     let eventsOnDateDiv = document.createElement("div");
     eventsOnDateDiv.className = "events-on-date";
 
     let dateDiv = document.createElement("div");
     dateDiv.className = "date";
     dateDiv.innerHTML = date;
+    dateDiv.innerHTML += `<button class="delete-event-button" onclick="deleteEventOnClick(event, '${date}')">X</button>`;
 
     eventsOnDateDiv.appendChild(dateDiv);
 
@@ -125,6 +162,8 @@ async function openAgenda() {
   let closeAgendaButton = document.querySelector("#close-agenda-button");
   closeAgendaButton?.addEventListener("click", () => {
     if (agendaDiv) {
+      console.log("linha 164");
+      isEditingAgenda = false;
       closeAgenda();
     }
   });
@@ -221,6 +260,7 @@ async function addEvent(client, date, event) {
     .then((response) => response.json())
     .then((data) => {
       alert("Evento adicionado com sucesso!"); //to the user
+      isEditingAgenda = true;
       console.log("Calendário atualizado:", data); //to the developer
     })
     .catch((error) => {

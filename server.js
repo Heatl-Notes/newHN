@@ -77,3 +77,37 @@ app.delete("/clients/:id", (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor iniciado na porta 3000");
 });
+
+// deletar um evento do calendário de um cliente específico
+app.delete("/clients/:id/calendar/:date", (req, res) => {
+  const clientId = req.params.id;
+  const eventDate = req.params.date;
+
+  if (db.clients.hasOwnProperty(clientId)) {
+    const client = db.clients[clientId];
+    const calendar = client.calendar;
+
+    if (calendar.hasOwnProperty(eventDate)) {
+      delete calendar[eventDate];
+      // Você também pode adicionar a lógica para deletar o evento do seu sistema de armazenamento de dados
+
+      const fs = require("fs");
+      fs.writeFile("db.json", JSON.stringify(db), (err) => {
+        if (err) {
+          console.error(
+            "Erro ao salvar as alterações no arquivo db.json:",
+            err
+          );
+          res.status(500).json({ error: "Erro ao salvar as alterações" });
+        } else {
+          console.log("Evento deletado com sucesso");
+          res.json({ message: "Evento deletado com sucesso" }); // Retorna uma mensagem de sucesso como resposta
+        }
+      });
+    } else {
+      res.status(404).json({ error: "Evento não encontrado" });
+    }
+  } else {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
