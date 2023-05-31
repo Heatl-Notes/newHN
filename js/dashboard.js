@@ -162,7 +162,6 @@ async function openAgenda() {
   let closeAgendaButton = document.querySelector("#close-agenda-button");
   closeAgendaButton?.addEventListener("click", () => {
     if (agendaDiv) {
-      console.log("linha 164");
       isEditingAgenda = false;
       closeAgenda();
     }
@@ -405,5 +404,8 @@ async function deletePatient(cpfToDelete) {
  * funtion to logout
  */
 function logout() {
-  window.location.href = "index.html";
+  localStorage.removeItem("token");
+  localStorage.removeItem("userID");
+  localStorage.removeItem("userName");
+  window.location = "index.html";
 }

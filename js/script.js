@@ -5,43 +5,66 @@
 /*
 LOGIN
 */
+function showLoadingIndicator() {
+  const loadingIndicator = document.getElementById("loading-indicator");
+  loadingIndicator.classList.add("show");
+}
+function hideLoadingIndicator() {
+  const loadingIndicator = document.getElementById("loading-indicator");
+  loadingIndicator.classList.remove("show");
+}
 
 function login() {
+  showLoadingIndicator();
   const emailForm = document.getElementById("login-email").value;
   const passwordForm = document.getElementById("login-password").value;
+
   sendLogin({
     email: emailForm,
-    passwordForm: passwordForm,
+    password: passwordForm,
+  }).finally(() => {
+    setTimeout(() => {
+      alert("Senha ou email incorretos!");
+      hideLoadingIndicator();
+    }, 2000);
   });
 
   async function sendLogin(user) {
-    let url = ""; //end point
+    let url = "http://localhost:3000/login"; //end point
+    const email = user.email;
+    const password = user.password;
 
     try {
-      let response = await fetch(url, {
+      fetch(url, {
         method: "POST",
-        body: JSON.stringify(user),
+        body: JSON.stringify({ email, password }),
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json;charset=utf-8",
+          "Content-Type": "application/json",
         },
-      });
+      })
+        .then((response) => {
+          // Verifica o status da resposta
+          if (response.status === 200) {
+            setTimeout(() => {
+              hideLoadingIndicator();
+              window.location = "dashboard.html";
+            }, 1000);
 
-      let json = await response.json();
-
-      if (response.status == 200) {
-        localStorage.setItem("token", json.token);
-        localStorage.setItem("userID", json.userID);
-        localStorage.setItem("userName", json.userName);
-        window.location = "dashboard.html";
-      } else {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userID");
-        localStorage.removeItem("userName");
-        alert(json.message);
-      }
+            return response.json(); // Converte a resposta em JSON
+          } else {
+            throw new Error("Erro na autenticação");
+          }
+        })
+        .then((data) => {
+          // Lógica para lidar com a resposta do servidor
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userID", data.userID);
+          localStorage.setItem("userName", data.userName);
+        })
+        .catch((error) => {
+          // Lógica para lidar com erros
+        });
     } catch (e) {
-      window.location = "dashboard.html"; //just for testing!
       console.log(e);
     }
   }
