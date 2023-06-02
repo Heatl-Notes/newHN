@@ -5,13 +5,36 @@
       "name": "Victor Paz Braga",
       "age": "3",
       "id": 2,
-      "email": "victor@gmail.com",
-      "password": 123
+      "comorbitities": ["diabetes", "hipertensão"]
     },
-    { "cpf": "12345678912", "name": "Andrade", "age": "3", "id": 3 },
-    { "cpf": "12345678912", "name": "Andrade", "age": "3", "id": 4 },
-    { "cpf": "12345678912", "name": "Victor Paz Braga", "age": "3", "id": 5 },
-    { "cpf": "12345678912", "name": "Andrade", "age": "3", "id": 6 }
+    {
+      "cpf": "12345678912",
+      "name": "Andrade",
+      "age": "3",
+      "id": 3,
+      "comorbitities": ["diabetes", "hipertensão"]
+    },
+    {
+      "cpf": "12345678912",
+      "name": "Andrade",
+      "age": "3",
+      "id": 4,
+      "comorbitities": ["diabetes", "hipertensão"]
+    },
+    {
+      "cpf": "12345678912",
+      "name": "Victor Paz Braga",
+      "age": "3",
+      "id": 5,
+      "comorbitities": []
+    },
+    {
+      "cpf": "12345678912",
+      "name": "Andrade",
+      "age": "3",
+      "id": 6,
+      "comorbitities": []
+    }
   ],
   "clients": {
     "123456789": {
@@ -45,20 +68,15 @@
       "specialties": ["primeiros socorros", "técnico de enfermagem"],
       "phone": "9999-99999",
       "calendar": {
-        "2021-01-01": [
-          {
-            "hour": "22:10",
-            "observation": "vamos jantar amanda",
-            "category": "alimentacao"
-          },
-          {
-            "hour": "12:52",
-            "observation": "vamos jantar 2",
-            "category": "alimentacao"
-          }
-        ],
         "2023-05-11": [
           { "hour": "17:56", "observation": "test", "category": "alimentacao" }
+        ],
+        "2023-06-22": [
+          {
+            "hour": "15:42",
+            "observation": "hahdhad",
+            "category": "alimentacao"
+          }
         ]
       }
     }

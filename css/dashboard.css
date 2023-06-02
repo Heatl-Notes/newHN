@@ -139,7 +139,7 @@ main {
   width: 300px;
   height: 200px;
   justify-content: center;
-  border: 2px solid rgba(219, 67, 25, 1);
+  border: 5px solid rgba(219, 67, 25, 1);
   padding: 30px;
   margin: 5px;
   border-radius: 10px;
@@ -388,6 +388,58 @@ main {
   width: 70px;
   height: 35px;
   margin-left: 230px;
-  margin-top: 60px;
+  margin-top: 1%;
   font-weight: bold;
+}
+
+li {
+  margin: 0;
+  margin-left: 30px;
+}
+
+nav {
+  height: 100%;
+}
+
+.comorbitities-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.comorbitities-list li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.comorbitities-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.red-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.green-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: green;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+#dot-label {
+  font-size: 16px;
 }

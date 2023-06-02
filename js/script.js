@@ -49,7 +49,6 @@ function login() {
               hideLoadingIndicator();
               window.location = "dashboard.html";
             }, 1000);
-
             return response.json(); // Converte a resposta em JSON
           } else {
             throw new Error("Erro na autenticação");

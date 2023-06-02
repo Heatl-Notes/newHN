@@ -44,7 +44,13 @@ async function loadPatients() {
   let cpf = 0;
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
-    innerH = `<h4>Paciente:  ${patient.name} </h4> <br><span>Idade: ${patient.age} </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+    let dotElement = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
+    if (patient.comorbitities.length > 0) {
+      dotElement = `<span class="red-dot"></span> (POSSUI)`;
+    }
+
+    innerH = `<h3>Nome:  ${patient.name} </h3> 
+      <p id="dot-label"><strong>Doenças crônicas:</strong> ${dotElement} </p><h4>Idade: ${patient.age} </h4> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;
@@ -277,15 +283,15 @@ function showPatientProfile(patient) {
   const popupElemento = document.createElement("div");
   popupElemento.className = "popup";
   popupElemento.innerHTML = `
-    <span class="closeButton">X</span>
-    <h1 class="name-patient-profile">Sr(a) ${name}</h1>
-    <div class=patient-info>
-      <h3>CPF: ${cpf}</h3>
-      <h3>Nome: ${name} COMPLETO?</h3>
-      <h3>Idade: ${age}</h3>
-      <h3>Outros detalhes do paciente...</h3>
-    </div>
-  `;
+      <span class="closeButton">X</span>
+      <h1 class="name-patient-profile">Sr(a) ${name}</h1>
+      <div class=patient-info>
+        <h3>CPF: ${cpf}</h3>
+        <h3>Nome: ${name} COMPLETO?</h3>
+        <h3>Idade: ${age}</h3>
+        <h3>Outros detalhes do paciente...</h3>
+      </div>
+    `;
   popupElemento.style.display = "block";
   document.body.appendChild(popupElemento);
   const closeButton = popupElemento.querySelector(".closeButton");
