@@ -3,7 +3,6 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
 const db = require("./db.json");
-
 const corsOptions = {
   origin: "*", // Define o cabeçalho "Access-Control-Allow-Origin" para permitir todas as origens
   methods: ["GET", "POST", "PATCH", "DELETE"], // Inclui os métodos HTTP permitidos
@@ -46,8 +45,45 @@ app.use(express.json());
 
 // Rota para obter todos os pacientes
 app.get("/patients", (req, res) => {
+  const patients = Object.values(db.patients);
+  res.json(patients);
+});
+
+app.get("/patientsAll", (req, res) => {
   const patients = db.patients;
   res.json(patients);
+});
+
+app.post("/patientsAll", (req, res) => {
+  const newPatient = req.body;
+  //problema eh q CPF n chega aq! PPQ??
+
+  // Verificar se já existe um paciente com o mesmo CPF
+  if (db.patients[newPatient.cpf]) {
+    return res
+      .status(409)
+      .json({ error: "Um paciente com o mesmo CPF já está cadastrado" });
+  }
+
+  // Adicionar o novo paciente ao banco de dados
+  db.patients[newPatient.cpf] = { ...newPatient };
+
+  res.status(201).json({ message: "Paciente adicionado com sucesso" });
+});
+
+app.get("/patients/:cpf", (req, res) => {
+  const cpf = req.params.cpf;
+
+  // Lógica para encontrar o paciente pelo CPF no banco de dados
+  const patient = Object.values(db.patients).find(
+    (patient) => patient.cpf === cpf
+  );
+
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.status(404).json({ error: "Paciente não encontrado" });
+  }
 });
 
 app.get("/clients", (req, res) => {

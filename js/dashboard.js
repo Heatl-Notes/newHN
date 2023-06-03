@@ -42,6 +42,7 @@ async function loadPatients() {
   let patientsJson = await patients.json();
   let innerH = "";
   let cpf = 0;
+
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
     let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
@@ -327,30 +328,33 @@ confirmButton.addEventListener("click", () => {
   const cpf = document.getElementById("cpf").value;
   const name = document.getElementById("name").value;
   const age = document.getElementById("age").value;
+  const comorbitities = document.getElementById("comorbitities").value;
+  const complexProcedures = document.getElementById("complexProcedures").value;
 
-  addPatient(cpf, name, age);
+  addPatient(cpf, name, age, comorbitities, complexProcedures);
 
   addPatientPopup.style.display = "none";
 });
 
-async function addPatient(cpf, name, age) {
+async function addPatient(cpf, name, age, comorbitities, complexProcedures) {
   const newPatient = {
     cpf: cpf,
     name: name,
     age: age,
+    comorbitities: comorbitities.split(","),
+    complexProcedures: complexProcedures.split(","),
   };
 
   try {
     const alreadyRegistered = await fetch(
-      "http://localhost:3000/patients?cpf=${cpf}"
+      `http://localhost:3000/patients/${cpf}`
     );
-    const patientsJson = await alreadyRegistered.json();
 
-    if (patientsJson.length > 0) {
+    if (alreadyRegistered.status === 200) {
       alert("Um paciente com o mesmo CPF já está cadastrado!");
-      return; // Retorna sem adicionar o paciente
+      return; // Retorna sem adicionar o paciente, encontrou um com o mesmo CPF
     }
-    const response = await fetch("http://localhost:3000/patients", {
+    const response = await fetch("http://localhost:3000/patientsAll", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -360,10 +364,12 @@ async function addPatient(cpf, name, age) {
 
     if (response.ok) {
       // Se o paciente foi adicionado com sucesso
-      console.log("Paciente adicionado com sucesso!");
+      //reload patients
+      loadPatients();
+      alert("Paciente adicionado com sucesso!");
     } else {
       // Se ocorreu algum erro ao adicionar o paciente
-      console.log("Erro ao adicionar paciente");
+      alert("Erro ao adicionar paciente");
     }
   } catch (error) {
     console.log("Erro ao adicionar paciente:", error);

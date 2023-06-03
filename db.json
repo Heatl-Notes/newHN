@@ -1,7 +1,7 @@
 {
-  "patients": [
-    {
-      "cpf": "12345678912",
+  "patients": {
+    "12345678913": {
+      "cpf": "12345678913",
       "name": "Victor Paz Braga",
       "age": "68",
       "id": 2,
@@ -9,8 +9,9 @@
       "gendder": "M",
       "complexProcedures": []
     },
-    {
-      "cpf": "12345678912",
+
+    "12345678914": {
+      "cpf": "12345678914",
       "name": "Andrade",
       "age": "91",
       "id": 3,
@@ -18,8 +19,9 @@
       "gender": ["M"],
       "complexProcedures": []
     },
-    {
-      "cpf": "12345678912",
+
+    "12345678915": {
+      "cpf": "12345678915",
       "name": "Andrade",
       "age": "3",
       "id": 4,
@@ -27,8 +29,8 @@
       "gender": ["M"],
       "complexProcedures": ["medicação intravenosa", "curativo barriga"]
     },
-    {
-      "cpf": "12345678912",
+    "12345678916": {
+      "cpf": "12345678916",
       "name": "Lucia",
       "age": "3",
       "id": 5,
@@ -36,8 +38,8 @@
       "gender": ["M"],
       "complexProcedures": ["curativo barriga"]
     },
-    {
-      "cpf": "12345678912",
+    "12345678917": {
+      "cpf": "12345678917",
       "name": "Andrade",
       "age": "72",
       "id": 6,
@@ -45,7 +47,7 @@
       "gender": ["M"],
       "complexProcedures": ["medicação intravenosa", "curativo barriga"]
     }
-  ],
+  },
   "clients": {
     "123456789": {
       "cpf": 300,
