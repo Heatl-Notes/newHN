@@ -44,13 +44,17 @@ async function loadPatients() {
   let cpf = 0;
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
-    let dotElement = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
+    let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
+    let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
     if (patient.comorbitities.length > 0) {
       dotElement = `<span class="red-dot"></span> (POSSUI)`;
     }
+    if (patient.complexProcedures.length > 0) {
+      dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
+    }
 
     innerH = `<h3>Nome:  ${patient.name} </h3> 
-      <p id="dot-label"><strong>Doenças crônicas:</strong> ${dotElement} </p><h4>Idade: ${patient.age} </h4> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+      <p id="dot-label  "><strong>Doenças crônicas:</strong> ${dotElementComorbitities} </p><p id="dot-label  "><strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} </p><span><strong>Idade: ${patient.age} </strong> </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;

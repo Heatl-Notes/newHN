@@ -140,7 +140,7 @@ main {
   height: 200px;
   justify-content: center;
   border: 5px solid rgba(219, 67, 25, 1);
-  padding: 30px;
+  padding: 40px;
   margin: 5px;
   border-radius: 10px;
   box-shadow: 0 1px;
@@ -387,8 +387,9 @@ main {
   border: none;
   width: 70px;
   height: 35px;
+  padding-top: 0 !important;
   margin-left: 230px;
-  margin-top: 1%;
+  margin-top: 0;
   font-weight: bold;
 }
 
