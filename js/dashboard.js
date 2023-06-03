@@ -1,12 +1,12 @@
+let isEditingAgenda = false;
 const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient(user) {
   let userId = 12345678919; //capturando o ID do usuario logado
-  let client = await fetch(`http://localhost:3000/clients/`); //fetch patients from api
+  let client = await fetch(`http://localhost:3000/clients?id=${userId}`); //fetch patients from api
   let clientJson = await client.json();
-  let courrentClient = clientJson[userId];
 
-  return courrentClient;
+  return clientJson;
 }
 /**
  * This file is responsible for the dashboard page
@@ -30,6 +30,7 @@ buttons.forEach((button) => {
 });
 
 async function loadPatients() {
+  closeAgenda();
   var main = document.querySelector(".main-content");
   main.innerHTML = "";
 
@@ -43,7 +44,17 @@ async function loadPatients() {
   let cpf = 0;
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
-    innerH = `<h4>Paciente:  ${patient.name} </h4> <br><span>Idade: ${patient.age} </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+    let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
+    let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
+    if (patient.comorbitities.length > 0) {
+      dotElement = `<span class="red-dot"></span> (POSSUI)`;
+    }
+    if (patient.complexProcedures.length > 0) {
+      dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
+    }
+
+    innerH = `<h3>Nome:  ${patient.name} </h3> 
+      <p id="dot-label  "><strong>Doenças crônicas:</strong> ${dotElementComorbitities} </p><p id="dot-label  "><strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} </p><span><strong>Idade: ${patient.age} </strong> </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;
@@ -61,6 +72,7 @@ async function loadPatients() {
  */
 
 async function openProfile() {
+  closeAgenda();
   closeButton.addEventListener("click", () => {
     popupElemento.remove();
   });
@@ -74,17 +86,98 @@ async function openProfile() {
   main.innerHTML = "";
   main.appendChild(novoElemento);
 }
+function closeAgenda() {
+  let agendaDiv = document.querySelector(".popup-agenda");
+  agendaDiv.style.display = "none";
+}
+
+async function deleteEventOnClick(event, date) {
+  event.preventDefault();
+  let localCourrentClient = await globalCourrentClient;
+  let events = localCourrentClient?.calendar;
+  delete events[date];
+
+  event.preventDefault();
+
+  const client = await globalCourrentClient; // Obtenha o ID do cliente da maneira adequada
+
+  console.log("DATE", date);
+  const url = `http://localhost:3000/clients/${client?.cpf}/calendar/${date}`;
+  console.log("URL", url);
+
+  fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Evento deletado com sucesso");
+        isEditingAgenda = true;
+        loadEvents();
+        // Realize qualquer ação necessária após a exclusão do evento
+      } else {
+        console.error("Erro ao deletar o evento:", response.statusText);
+        // Lide com o erro de exclusão do evento adequadamente
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao fazer a requisição DELETE:", error);
+      // Lide com o erro de requisição adequadamente
+    });
+
+  console.log(`Excluir evento na data: ${date}`);
+}
+
+async function loadEvents() {
+  let localCourrentClient = await globalCourrentClient;
+  let events = localCourrentClient?.calendar;
+
+  let eventsDiv = document.querySelector(".events-agenda");
+  eventsDiv.innerHTML = "";
+
+  for (let date in events) {
+    let eventsOnDate = events[date];
+    let eventsOnDateDiv = document.createElement("div");
+    eventsOnDateDiv.className = "events-on-date";
+
+    let dateDiv = document.createElement("div");
+    dateDiv.className = "date";
+    dateDiv.innerHTML = date;
+    dateDiv.innerHTML += `<button class="delete-event-button" onclick="deleteEventOnClick(event, '${date}')">X</button>`;
+
+    eventsOnDateDiv.appendChild(dateDiv);
+
+    for (let event of eventsOnDate) {
+      let eventDiv = document.createElement("div");
+      eventDiv.className = "event";
+      eventDiv.innerHTML = `<span class="hour">${event.hour}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
+
+      eventsOnDateDiv.appendChild(eventDiv);
+    }
+
+    eventsDiv.appendChild(eventsOnDateDiv);
+  }
+}
 
 async function openAgenda() {
+  let agendaDivName = document.querySelector("#agendaName");
+  let localCourrentClient = await globalCourrentClient;
+  agendaDivName.innerHTML = `Agenda de ${localCourrentClient?.name}`;
+
   let agendaDiv = document.querySelector(".popup-agenda");
   agendaDiv.style.display = "block";
 
   let closeAgendaButton = document.querySelector("#close-agenda-button");
   closeAgendaButton?.addEventListener("click", () => {
     if (agendaDiv) {
-      agendaDiv.style.display = "none";
+      isEditingAgenda = false;
+      closeAgenda();
     }
   });
+
+  loadEvents(); //here I load the events of a client
 
   //capturing the event elements
   let dateElement = document.querySelector("#date");
@@ -133,30 +226,56 @@ async function openAgenda() {
     // }
   });
 }
+function eventParamsCheck(date, event) {
+  return (
+    date === "" ||
+    event.hour === "" ||
+    event.observation === "" ||
+    event.category === ""
+  );
+}
 
 async function addEvent(client, date, event) {
+  if (eventParamsCheck(date, event)) {
+    alert("Parametros invalidos! Data e/ou horario vazio(s)");
+    return;
+  }
+
   let cpf = client.cpf;
-  console.log(cpf);
   let response = await fetch(`http://localhost:3000/clients?id=${cpf}`);
-  let saida = await response.json();
+  const clientJson = await response.json();
 
-  const clientJson = saida; //worked
+  let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
 
-  let calendar = clientJson?.calendar; //capturo o calendario do cliente
-  //1. preciso verificar se ele tem a data ja cadastrada
-  //2. se nao tiver, coloco
+  if (date in clientCalendar) {
+    console.log("date already exists in calendar");
+    // A data já existe no calendário, adiciona o evento à lista de eventos dessa data
+    clientCalendar[date].push(event);
+  } else {
+    // A data não existe no calendário, cria a chave e adiciona o evento
+    clientCalendar[date] = [event];
+  }
 
-  // let response = await fetch(`http://localhost:3000/clients/${cpf}`, {
-  //   method: "PATCH",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     calendar: {
-  //       [date]: event,
-  //     },
-  //   }),
-  // });
+  // Atualiza o calendário do cliente no servidor
+  fetch(`http://localhost:3000/clients/${cpf}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      calendar: clientCalendar,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert("Evento adicionado com sucesso!"); //to the user
+      isEditingAgenda = true;
+      console.log("Calendário atualizado:", data); //to the developer
+    })
+    .catch((error) => {
+      alert("Erro ao atualizar o calendário!"); //to the user
+      console.error("Erro ao atualizar o calendário:", error); //to developer
+    });
 }
 
 //OPEN PATIENT PROFILE
@@ -168,15 +287,15 @@ function showPatientProfile(patient) {
   const popupElemento = document.createElement("div");
   popupElemento.className = "popup";
   popupElemento.innerHTML = `
-    <span class="closeButton">X</span>
-    <h1 class="name-patient-profile">Sr(a) ${name}</h1>
-    <div class=patient-info>
-      <h3>CPF: ${cpf}</h3>
-      <h3>Nome: ${name} COMPLETO?</h3>
-      <h3>Idade: ${age}</h3>
-      <h3>Outros detalhes do paciente...</h3>
-    </div>
-  `;
+      <span class="closeButton">X</span>
+      <h1 class="name-patient-profile">Sr(a) ${name}</h1>
+      <div class=patient-info>
+        <h3>CPF: ${cpf}</h3>
+        <h3>Nome: ${name} COMPLETO?</h3>
+        <h3>Idade: ${age}</h3>
+        <h3>Outros detalhes do paciente...</h3>
+      </div>
+    `;
   popupElemento.style.display = "block";
   document.body.appendChild(popupElemento);
   const closeButton = popupElemento.querySelector(".closeButton");
@@ -295,5 +414,8 @@ async function deletePatient(cpfToDelete) {
  * funtion to logout
  */
 function logout() {
-  window.location.href = "index.html";
+  localStorage.removeItem("token");
+  localStorage.removeItem("userID");
+  localStorage.removeItem("userName");
+  window.location = "index.html";
 }

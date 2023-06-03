@@ -2,78 +2,69 @@
   "patients": [
     {
       "cpf": "12345678912",
-      "name": "Andrade",
-      "age": "3",
-      "id": 1
-    },
-    {
-      "cpf": "12345678912",
       "name": "Victor Paz Braga",
-      "age": "3",
-      "id": 2
+      "age": "68",
+      "id": 2,
+      "comorbitities": ["diabetes", "hipertensão"],
+      "gendder": "M",
+      "complexProcedures": []
+    },
+    {
+      "cpf": "12345678912",
+      "name": "Andrade",
+      "age": "91",
+      "id": 3,
+      "comorbitities": ["diabetes", "hipertensão"],
+      "gender": ["M"],
+      "complexProcedures": []
     },
     {
       "cpf": "12345678912",
       "name": "Andrade",
       "age": "3",
-      "id": 3
+      "id": 4,
+      "comorbitities": ["diabetes", "hipertensão"],
+      "gender": ["M"],
+      "complexProcedures": ["medicação intravenosa", "curativo barriga"]
+    },
+    {
+      "cpf": "12345678912",
+      "name": "Lucia",
+      "age": "3",
+      "id": 5,
+      "comorbitities": [],
+      "gender": ["M"],
+      "complexProcedures": ["curativo barriga"]
     },
     {
       "cpf": "12345678912",
       "name": "Andrade",
-      "age": "3",
-      "id": 4
-    },
-    {
-      "cpf": "12345678912",
-      "name": "Victor Paz Braga",
-      "age": "3",
-      "id": 5
-    },
-    {
-      "cpf": "12345678912",
-      "name": "Andrade",
-      "age": "3",
-      "id": 6
+      "age": "72",
+      "id": 6,
+      "comorbitities": [],
+      "gender": ["M"],
+      "complexProcedures": ["medicação intravenosa", "curativo barriga"]
     }
   ],
   "clients": {
     "123456789": {
-      "cpf": 12345678919,
-      "name": "Juca",
-      "last_name": "Silva",
+      "cpf": 300,
+      "name": "Breno",
+      "last_name": "Borges",
       "age": 28,
+      "email": "victor@gmail.com",
+      "password": "123",
       "monthsExperience": 12,
-      "email": "lucas_silva@mails.com",
-      "specialties": [
-        "primeiros socorros",
-        "técnico de enfermagem"
-      ],
+      "specialties": ["primeiros socorros", "técnico de enfermagem"],
       "phone": "9999-99999",
       "calendar": {
         "2021-01-01": [
-          {
-            "hour": "08:00",
-            "observation": "teste",
-            "category": "medicine"
-          },
-          {
-            "hour": "09:00",
-            "observation": "teste",
-            "category": "medicine"
-          },
-          {
-            "hour": ":00",
-            "observation": "teste",
-            "category": "medicine"
-          }
+          { "hour": "08:00", "observation": "teste", "category": "medicine" },
+          { "hour": "09:00", "observation": "teste", "category": "medicine" },
+          { "hour": ":00", "observation": "teste", "category": "medicine" }
         ],
         "2021-01-02": [
-          {
-            "hour": "08:00",
-            "observation": "teste",
-            "category": "medicine"
-          }
+          { "hour": "08:00", "observation": "teste", "category": "medicine" }
         ]
       }
     },
@@ -84,34 +75,17 @@
       "age": 28,
       "monthsExperience": 12,
       "email": "lucas_silva@mails.com",
-      "specialties": [
-        "primeiros socorros",
-        "técnico de enfermagem"
-      ],
+      "specialties": ["primeiros socorros", "técnico de enfermagem"],
       "phone": "9999-99999",
       "calendar": {
-        "2021-01-01": [
-          {
-            "hour": "08:00",
-            "observation": "teste",
-            "category": "medicine"
-          },
-          {
-            "hour": "09:00",
-            "observation": "teste",
-            "category": "medicine"
-          },
-          {
-            "hour": ":00",
-            "observation": "teste",
-            "category": "medicine"
-          }
+        "2023-05-11": [
+          { "hour": "17:56", "observation": "test", "category": "alimentacao" }
         ],
-        "2021-01-02": [
+        "2023-06-22": [
           {
-            "hour": "08:00",
-            "observation": "teste",
-            "category": "medicine"
+            "hour": "15:42",
+            "observation": "hahdhad",
+            "category": "alimentacao"
           }
         ]
       }
