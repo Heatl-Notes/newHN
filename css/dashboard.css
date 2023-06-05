@@ -15,7 +15,7 @@ header {
   right: 0; /* adicionado */
   top: 0; /* adicionado */
 
-  width: calc(100% - 280px); /* adicionado para ocupar a largura completa */
+  width: calc(100% - 299px); /* adicionado para ocupar a largura completa */
   z-index: 1; /* adicionado para ficar acima dos outros elementos */
 }
 
@@ -38,7 +38,7 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 220px;
 }
 
 nav ul {
@@ -71,8 +71,8 @@ nav li {
 }
 
 .user-avatar {
-  width: 100px;
-  height: 70px;
+  width: 180px;
+  height: 120px;
 }
 
 .appointment {
