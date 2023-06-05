@@ -45,6 +45,7 @@ async function loadPatients() {
 
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
+
     let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
     let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
     if (patient.comorbitities.length > 0) {
@@ -378,8 +379,10 @@ async function addPatient(cpf, name, age, comorbitities, complexProcedures) {
 
 //DELETE PATIENTS
 function deletePatientOnClick(event, cpf) {
+  let cpfString = cpf.toString().padStart(11, "0");
+  console.log("deletePatientOnClick", cpfString);
   event.stopPropagation();
-  deletePatient(cpf);
+  deletePatient(cpfString);
 }
 
 async function deletePatient(cpfToDelete) {
@@ -389,7 +392,6 @@ async function deletePatient(cpfToDelete) {
       `http://localhost:3000/patients/${cpfToDelete}`
     );
     const patientJson = await response.json();
-    console.log("Paciente encontrado:", patientJson);
     const patientCpf = patientJson.cpf; // Supondo que a API retorna um campo "id" para cada paciente
 
     if (!patientJson) {
