@@ -18,8 +18,7 @@ const secretKey = "your-secret-key"; // Chave secreta para assinar os tokens JWT
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  console.log("EMAIL", email);
-  console.log("PASSWORD", password);
+  console.log("tentando logar o EMAIL", email);
 
   // Lógica para autenticar o usuário com base no email e senha fornecidos
   const client = Object.values(db.clients).find(
@@ -33,7 +32,10 @@ app.post("/login", (req, res) => {
 
     // Gerar o token JWT
     const token = jwt.sign({ userID: id, userName: name }, secretKey);
-    res.status(200).json({ token, userID: id, userName: name });
+    console.log(token, id, name);
+    res
+      .status(200)
+      .json({ token, userID: id, userName: name, userCpf: client.cpf });
   } else {
     // Autenticação falhou
     res.status(401).json({ message: "Credenciais inválidas" });

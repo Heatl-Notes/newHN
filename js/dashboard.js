@@ -1,9 +1,9 @@
 let isEditingAgenda = false;
 const globalCourrentClient = loadCurrentClient();
 
-async function loadCurrentClient(user) {
-  let userId = 12345678919; //capturando o ID do usuario logado
-  let client = await fetch(`http://localhost:3000/clients?id=${userId}`); //fetch patients from api
+async function loadCurrentClient() {
+  let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
+  let client = await fetch(`http://localhost:3000/clients?id=${userCpf}`); //fetch patients from api
   let clientJson = await client.json();
 
   return clientJson;
@@ -425,3 +425,13 @@ function logout() {
   localStorage.removeItem("userName");
   window.location = "index.html";
 }
+
+/**
+ * this function get the name of the logged user and show in the page
+ */
+async function getName() {
+  const userName = localStorage.getItem("userName");
+  const nameDisplay = document.getElementById("clientName");
+  nameDisplay.innerHTML = `Sr(a). ${userName}`;
+}
+window.addEventListener("load", getName);

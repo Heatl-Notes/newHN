@@ -57,7 +57,7 @@ function login() {
         .then((data) => {
           // Lógica para lidar com a resposta do servidor
           localStorage.setItem("token", data.token);
-          localStorage.setItem("userID", data.userID);
+          localStorage.setItem("userCpf", data.userCpf);
           localStorage.setItem("userName", data.userName);
         })
         .catch((error) => {

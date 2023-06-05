@@ -393,6 +393,12 @@ main {
   font-weight: bold;
 }
 
+#delete-buttom-patient-card:hover {
+  background-color: rgb(235, 179, 163);
+  cursor: pointer;
+  color: black;
+}
+
 li {
   margin: 0;
   margin-left: 30px;
