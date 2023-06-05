@@ -326,15 +326,20 @@ addPatientButton.addEventListener("click", () => {
  * Apos enviar os dados para o metodo addPatient, o popup é fechado
  */
 confirmButton.addEventListener("click", () => {
-  const cpf = document.getElementById("cpf").value;
-  const name = document.getElementById("name").value;
-  const age = document.getElementById("age").value;
-  const comorbitities = document.getElementById("comorbitities").value;
-  const complexProcedures = document.getElementById("complexProcedures").value;
+  try {
+    const cpf = document.getElementById("cpf").value;
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const comorbitities = document.getElementById("comorbitities").value;
+    const complexProcedures =
+      document.getElementById("complexProcedures").value;
 
-  addPatient(cpf, name, age, comorbitities, complexProcedures);
-
-  addPatientPopup.style.display = "none";
+    addPatient(cpf, name, age, comorbitities, complexProcedures);
+    addPatientPopup.style.display = "none";
+  } catch (error) {
+    alert(error.message || "Erro ao adicionar paciente!");
+    console.log(error);
+  }
 });
 
 async function addPatient(cpf, name, age, comorbitities, complexProcedures) {
@@ -360,7 +365,7 @@ async function addPatient(cpf, name, age, comorbitities, complexProcedures) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newPatient),
+      body: JSON.stringify({ patient: newPatient }),
     });
 
     if (response.ok) {

@@ -51,14 +51,13 @@ app.get("/patients", (req, res) => {
   res.json(patients);
 });
 
-app.get("/patientsAll", (req, res) => {
+app.get("/patientsAll", (res) => {
   const patients = db.patients;
   res.json(patients);
 });
 
 app.post("/patientsAll", (req, res) => {
-  const newPatient = req.body;
-  //problema eh q CPF n chega aq! PPQ??
+  const newPatient = req.body.patient; // Obtenha os dados do paciente diretamente de req.body
 
   // Verificar se já existe um paciente com o mesmo CPF
   if (db.patients[newPatient.cpf]) {
@@ -70,7 +69,16 @@ app.post("/patientsAll", (req, res) => {
   // Adicionar o novo paciente ao banco de dados
   db.patients[newPatient.cpf] = { ...newPatient };
 
-  res.status(201).json({ message: "Paciente adicionado com sucesso" });
+  const fs = require("fs");
+  fs.writeFile("db.json", JSON.stringify(db), (err) => {
+    if (err) {
+      console.error("Erro ao salvar as alterações no arquivo db.json:", err);
+      res.status(500).json({ error: "Erro ao salvar as alterações" });
+    } else {
+      console.log("Paciente adicionado com sucesso");
+      res.status(201).json({ message: "Paciente adicionado com sucesso" });
+    }
+  });
 });
 
 app.get("/patients/:cpf", (req, res) => {
