@@ -88,6 +88,29 @@ app.get("/patients/:cpf", (req, res) => {
   }
 });
 
+app.delete("/patients/", (req, res) => {
+  const cpf = req.body.cpf;
+
+  // Verifica se existe um paciente com o CPF fornecido no banco de dados
+  if (db.patients.hasOwnProperty(cpf)) {
+    // Remove o paciente do banco de dados
+    delete db.patients[cpf];
+
+    const fs = require("fs");
+    fs.writeFile("db.json", JSON.stringify(db), (err) => {
+      if (err) {
+        console.error("Erro ao salvar as alterações no arquivo db.json:", err);
+        res.status(500).json({ error: "Erro ao salvar as alterações" });
+      } else {
+        console.log("Paciente deletado com sucesso");
+        res.json({ message: "Paciente deletado com sucesso" }); // Retorna uma mensagem de sucesso como resposta
+      }
+    });
+  } else {
+    res.status(404).json({ error: "Paciente não encontrado" });
+  }
+});
+
 app.get("/clients", (req, res) => {
   const clientId = req.query.id;
 

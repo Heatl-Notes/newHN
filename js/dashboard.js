@@ -386,24 +386,25 @@ async function deletePatient(cpfToDelete) {
   try {
     // Verificar se o paciente existe antes de excluir
     const response = await fetch(
-      `http://localhost:3000/patients?cpf=${cpfToDelete}`
+      `http://localhost:3000/patients/${cpfToDelete}`
     );
-    const patientsJson = await response.json();
-    console.log("Paciente encontrado:", patientsJson);
+    const patientJson = await response.json();
+    console.log("Paciente encontrado:", patientJson);
+    const patientCpf = patientJson.cpf; // Supondo que a API retorna um campo "id" para cada paciente
 
-    if (patientsJson.length === 0) {
+    if (!patientJson) {
       console.log("Paciente não encontrado!");
       return; // Retorna sem excluir o paciente
     }
 
     // Excluir o paciente caso seja encontrado
-    const patientId = patientsJson[0].id; // Supondo que a API retorna um campo "id" para cada paciente
-    const deleteResponse = await fetch(
-      `http://localhost:3000/patients/${patientId}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const deleteResponse = await fetch(`http://localhost:3000/patients/`, {
+      method: "DELETE",
+      body: JSON.stringify({ cpf: patientCpf }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (deleteResponse.ok) {
       loadPatients(); // Recarrega a lista de pacientes após a exclusão
