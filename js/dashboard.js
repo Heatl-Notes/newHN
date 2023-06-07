@@ -354,7 +354,7 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
   const newPatient = {
     cpf: cpf,
     name: name,
-    age: age
+    age: age,
     //comorbitities: comorbidities.split(","),
     //complexProcedures: complexProcedures.split(","),
   };
@@ -410,7 +410,13 @@ async function deletePatient(cpfToDelete) {
   try {
     // Verificar se o paciente existe antes de excluir
     const response = await fetch(
-      `http://localhost:3000/patients/${cpfToDelete}`
+      `http://localhost:8080/patient/${cpfToDelete}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": localStorage.getItem("token")
+        }
+      }
     );
     const patientJson = await response.json();
     const patientCpf = patientJson.cpf; // Supondo que a API retorna um campo "id" para cada paciente
@@ -421,11 +427,12 @@ async function deletePatient(cpfToDelete) {
     }
 
     // Excluir o paciente caso seja encontrado
-    const deleteResponse = await fetch(`http://localhost:3000/patients/`, {
+    const deleteResponse = await fetch(`http://localhost:8080/patient/${patientCpf}`, {
       method: "DELETE",
       body: JSON.stringify({ cpf: patientCpf }),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token")
       },
     });
 
