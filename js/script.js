@@ -57,8 +57,8 @@ function login() {
         .then((data) => {
           // Lógica para lidar com a resposta do servidor
           localStorage.setItem("token", data.tokenJWT);
-          localStorage.setItem("userCpf", data.userCpf);
-          localStorage.setItem("userName", data.userName);
+          localStorage.setItem("userCpf", data.cpf);
+          localStorage.setItem("userName", data.name);
         })
         .catch((error) => {
           // Lógica para lidar com erros

@@ -38,7 +38,13 @@ async function loadPatients() {
   //run the command:json-server --watch db.json (in this directory)
 
   //REAL CODE
-  let patients = await fetch("http://localhost:3000/patients"); //fetch patients from api
+  let patients = await fetch("http://localhost:8080/patient",{
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": localStorage.getItem("token")
+    },
+  }); //fetch patients from api
   let patientsJson = await patients.json();
   let innerH = "";
   let cpf = 0;
@@ -48,12 +54,14 @@ async function loadPatients() {
 
     let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
     let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
-    if (patient.comorbitities.length > 0) {
-      dotElement = `<span class="red-dot"></span> (POSSUI)`;
-    }
-    if (patient.complexProcedures.length > 0) {
-      dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
-    }
+
+  
+//    if (patient?.comorbitities.length > 0) {
+//      dotElement = `<span class="red-dot"></span> (POSSUI)`;
+//    }
+//    if (patient?.complexProcedures.length > 0) {
+//      dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
+//    }
 
     innerH = `<h3>Nome:  ${patient.name} </h3> 
       <p id="dot-label  "><strong>Doenças crônicas:</strong> ${dotElementComorbitities} </p><p id="dot-label  "><strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} </p><span><strong>Idade: ${patient.age} </strong> </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
@@ -342,30 +350,38 @@ confirmButton.addEventListener("click", () => {
   }
 });
 
-async function addPatient(cpf, name, age, comorbitities, complexProcedures) {
+async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
   const newPatient = {
     cpf: cpf,
     name: name,
-    age: age,
-    comorbitities: comorbitities.split(","),
-    complexProcedures: complexProcedures.split(","),
+    age: age
+    //comorbitities: comorbidities.split(","),
+    //complexProcedures: complexProcedures.split(","),
   };
 
   try {
+    
     const alreadyRegistered = await fetch(
-      `http://localhost:3000/patients/${cpf}`
+      `http://localhost:8080/patient/${cpf}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": localStorage.getItem("token")
+        },
+      }
     );
-
     if (alreadyRegistered.status === 200) {
       alert("Um paciente com o mesmo CPF já está cadastrado!");
       return; // Retorna sem adicionar o paciente, encontrou um com o mesmo CPF
     }
-    const response = await fetch("http://localhost:3000/patientsAll", {
+
+    const response = await fetch("http://localhost:8080/patient", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token")
       },
-      body: JSON.stringify({ patient: newPatient }),
+      body: JSON.stringify(newPatient),
     });
 
     if (response.ok) {
