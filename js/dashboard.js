@@ -55,8 +55,9 @@ async function loadPatients() {
     let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
     let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
 
+    console.log(patient)
   
-    if (patient?.comorbitities.length > 0) {
+    if (patient?.comorbidities.length > 0) {
       dotElement = `<span class="red-dot"></span> (POSSUI)`;
     }
     if (patient?.complexProcedures.length > 0) {
