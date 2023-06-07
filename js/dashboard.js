@@ -38,11 +38,11 @@ async function loadPatients() {
   //run the command:json-server --watch db.json (in this directory)
 
   //REAL CODE
-  let patients = await fetch("http://localhost:8080/patient",{
+  let patients = await fetch("http://localhost:8080/patient", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": localStorage.getItem("token")
+      Authorization: localStorage.getItem("token"),
     },
   }); //fetch patients from api
   let patientsJson = await patients.json();
@@ -55,8 +55,8 @@ async function loadPatients() {
     let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
     let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
 
-    console.log(patient)
-  
+    console.log(patient);
+
     if (patient?.comorbidities.length > 0) {
       dotElement = `<span class="red-dot"></span> (POSSUI)`;
     }
@@ -145,22 +145,22 @@ async function loadEvents() {
   let localCourrentClient = await globalCourrentClient;
   let events = localCourrentClient?.calendar;
 
-  events.sort((a,b) => {
-    a.date-b.date
-  })
+  events.sort((a, b) => {
+    a.date - b.date;
+  });
 
-  console.log(events)
-  
+  console.log(events);
+
   let eventsDiv = document.querySelector(".events-agenda");
   eventsDiv.innerHTML = "";
-  
+
   for (let i in events) {
-    let date = events[i].date
+    let date = events[i].date;
     let eventsOnDate = events[i].schedules;
-    eventsOnDate.sort((a,b) => {
-      a.time-b.time
-    })
-    console.log(eventsOnDate)
+    eventsOnDate.sort((a, b) => {
+      a.time - b.time;
+    });
+    console.log(eventsOnDate);
     let eventsOnDateDiv = document.createElement("div");
     eventsOnDateDiv.className = "events-on-date";
 
@@ -274,50 +274,46 @@ async function addEvent(client, date, event) {
     // A data já existe no calendário, adiciona o evento à lista de eventos dessa data
     //clientCalendar[date].push(event);
   } //else {
-    // A data não existe no calendário, cria a chave e adiciona o evento
-    //clientCalendar[date] = [event];
+  // A data não existe no calendário, cria a chave e adiciona o evento
+  //clientCalendar[date] = [event];
   //}
 
   // Atualiza o calendário do cliente no servidor
-
 
   fetch(`http://localhost:8080/patient/schedule/${cpf}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": localStorage.getItem("token")
+      Authorization: localStorage.getItem("token"),
     },
     body: JSON.stringify({
       date: date,
       time: event.hour,
       observation: event.observation,
-      category: event.category
+      category: event.category,
     }),
-  })
-    .then((response) => {
-      if (response.status === 200){
-        alert("Evento adicionado com sucesso!"); //to the user
-        console.log("Calendário atualizado"); //to the developer
-        window.location = "dashboard.html";
-        return
-      } else {
-        alert("Erro ao atualizar o calendário!"); //to the user
-        console.error("Erro ao atualizar o calendário"); //to developer
-      }
-    });
+  }).then((response) => {
+    if (response.status === 200) {
+      alert("Evento adicionado com sucesso!"); //to the user
+      console.log("Calendário atualizado"); //to the developer
+      window.location = "dashboard.html";
+      return;
+    } else {
+      alert("Erro ao atualizar o calendário!"); //to the user
+      console.error("Erro ao atualizar o calendário"); //to developer
+    }
+  });
 
-    
-
-    //.then((response) => response.json())
-    //.then((data) => {
-    //  alert("Evento adicionado com sucesso!"); //to the user
-    //  isEditingAgenda = true;
-    //  console.log("Calendário atualizado:", data); //to the developer
-    //})
-    //.catch((error) => {
-    //  alert("Erro ao atualizar o calendário!"); //to the user
-    //  console.error("Erro ao atualizar o calendário:", error); //to developer
-    //});
+  //.then((response) => response.json())
+  //.then((data) => {
+  //  alert("Evento adicionado com sucesso!"); //to the user
+  //  isEditingAgenda = true;
+  //  console.log("Calendário atualizado:", data); //to the developer
+  //})
+  //.catch((error) => {
+  //  alert("Erro ao atualizar o calendário!"); //to the user
+  //  console.error("Erro ao atualizar o calendário:", error); //to developer
+  //});
 }
 
 //OPEN PATIENT PROFILE
@@ -326,16 +322,34 @@ function showPatientProfile(patient) {
   const name = patient?.name;
   const age = patient?.age;
 
+  let comorbiditiesList = patient?.comorbidities;
+  let comorbiditiesString = "";
+  comorbiditiesList.forEach((comorbidit) => {
+    comorbiditiesString += comorbidit.description.trim();
+    if (comorbidit != comorbiditiesList[comorbiditiesList.length - 1]) {
+      comorbiditiesString += ", ";
+    }
+  });
+  let proceduresList = patient?.complexProcedures;
+  let complexProceduresString = "";
+  proceduresList.forEach((procedure) => {
+    complexProceduresString += procedure.description.trim();
+    if (procedure != proceduresList[proceduresList.length - 1]) {
+      complexProceduresString += ", ";
+    }
+  });
+
   const popupElemento = document.createElement("div");
   popupElemento.className = "popup";
   popupElemento.innerHTML = `
       <span class="closeButton">X</span>
       <h1 class="name-patient-profile">Sr(a) ${name}</h1>
       <div class=patient-info>
-        <h3>CPF: ${cpf}</h3>
-        <h3>Nome: ${name} COMPLETO?</h3>
-        <h3>Idade: ${age}</h3>
-        <h3>Outros detalhes do paciente...</h3>
+        <h3><u>CPF</u>: ${cpf}</h3>
+        <h3><u>Nome</u>: ${name} COMPLETO?</h3>
+        <h3><u>Idade</u>: ${age}</h3>
+        <h3><u>Comorbidades</u>: ${comorbiditiesString}</h3>
+        <h3><u>Procedimentos</u>: ${complexProceduresString}</h3>
       </div>
     `;
   popupElemento.style.display = "block";
@@ -386,12 +400,12 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
   let comorbititiesList = [];
   let complexProceduresList = [];
 
-  comorbidities.split(",").forEach(comorbiditie => {
-    comorbititiesList.push({description:comorbiditie})
+  comorbidities.split(",").forEach((comorbiditie) => {
+    comorbititiesList.push({ description: comorbiditie });
   });
 
-  complexProcedures.split(",").forEach(procedure => {
-    complexProceduresList.push({description:procedure})
+  complexProcedures.split(",").forEach((procedure) => {
+    complexProceduresList.push({ description: procedure });
   });
 
   const newPatient = {
@@ -403,13 +417,13 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
   };
 
   try {
-    
     const alreadyRegistered = await fetch(
-      `http://localhost:8080/patient/${cpf}`, {
+      `http://localhost:8080/patient/${cpf}`,
+      {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": localStorage.getItem("token")
+          Authorization: localStorage.getItem("token"),
         },
       }
     );
@@ -422,7 +436,7 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": localStorage.getItem("token")
+        Authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(newPatient),
     });
@@ -453,12 +467,13 @@ async function deletePatient(cpfToDelete) {
   try {
     // Verificar se o paciente existe antes de excluir
     const response = await fetch(
-      `http://localhost:8080/patient/${cpfToDelete}`,{
+      `http://localhost:8080/patient/${cpfToDelete}`,
+      {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       }
     );
     const patientJson = await response.json();
@@ -470,14 +485,17 @@ async function deletePatient(cpfToDelete) {
     }
 
     // Excluir o paciente caso seja encontrado
-    const deleteResponse = await fetch(`http://localhost:8080/patient/${patientCpf}`, {
-      method: "DELETE",
-      body: JSON.stringify({ cpf: patientCpf }),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": localStorage.getItem("token")
-      },
-    });
+    const deleteResponse = await fetch(
+      `http://localhost:8080/patient/${patientCpf}`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ cpf: patientCpf }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
 
     if (deleteResponse.ok) {
       loadPatients(); // Recarrega a lista de pacientes após a exclusão
