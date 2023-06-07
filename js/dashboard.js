@@ -351,12 +351,23 @@ confirmButton.addEventListener("click", () => {
 });
 
 async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
+  let comorbititiesList = [];
+  let complexProceduresList = [];
+
+  comorbidities.split(",").forEach(comorbiditie => {
+    comorbititiesList.push({description:comorbiditie})
+  });
+
+  complexProcedures.split(",").forEach(procedure => {
+    complexProceduresList.push({description:procedure})
+  });
+
   const newPatient = {
     cpf: cpf,
     name: name,
     age: age,
-    //comorbitities: comorbidities.split(","),
-    //complexProcedures: complexProcedures.split(","),
+    comorbidities: comorbititiesList,
+    complexProcedures: complexProceduresList,
   };
 
   try {
