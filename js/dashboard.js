@@ -3,7 +3,7 @@ const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient() {
   let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
-  let client = await fetch(`http://localhost:3000/clients?id=${userCpf}`); //fetch patients from api
+  let client = await fetch(`http://localhost:8080/caregiver/${userCpf}`); //fetch patients from api
   let clientJson = await client.json();
 
   return clientJson;
@@ -56,12 +56,12 @@ async function loadPatients() {
     let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
 
   
-//    if (patient?.comorbitities.length > 0) {
-//      dotElement = `<span class="red-dot"></span> (POSSUI)`;
-//    }
-//    if (patient?.complexProcedures.length > 0) {
-//      dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
-//    }
+    if (patient?.comorbitities.length > 0) {
+      dotElement = `<span class="red-dot"></span> (POSSUI)`;
+    }
+    if (patient?.complexProcedures.length > 0) {
+      dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
+    }
 
     innerH = `<h3>Nome:  ${patient.name} </h3> 
       <p id="dot-label  "><strong>Doenças crônicas:</strong> ${dotElementComorbitities} </p><p id="dot-label  "><strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} </p><span><strong>Idade: ${patient.age} </strong> </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
@@ -144,25 +144,36 @@ async function loadEvents() {
   let localCourrentClient = await globalCourrentClient;
   let events = localCourrentClient?.calendar;
 
+  events.sort((a,b) => {
+    a.date-b.date
+  })
+
+  console.log(events)
+  
   let eventsDiv = document.querySelector(".events-agenda");
   eventsDiv.innerHTML = "";
-
-  for (let date in events) {
-    let eventsOnDate = events[date];
+  
+  for (let i in events) {
+    let date = events[i].date
+    let eventsOnDate = events[i].schedules;
+    eventsOnDate.sort((a,b) => {
+      a.time-b.time
+    })
+    console.log(eventsOnDate)
     let eventsOnDateDiv = document.createElement("div");
     eventsOnDateDiv.className = "events-on-date";
 
     let dateDiv = document.createElement("div");
     dateDiv.className = "date";
     dateDiv.innerHTML = date;
-    dateDiv.innerHTML += `<button class="delete-event-button" onclick="deleteEventOnClick(event, '${date}')">X</button>`;
+    //dateDiv.innerHTML += `<button class="delete-event-button" onclick="deleteEventOnClick(event, '${date}')">X</button>`;
 
     eventsOnDateDiv.appendChild(dateDiv);
 
     for (let event of eventsOnDate) {
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
-      eventDiv.innerHTML = `<span class="hour">${event.hour}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
+      eventDiv.innerHTML = `<span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
 
       eventsOnDateDiv.appendChild(eventDiv);
     }
@@ -252,7 +263,7 @@ async function addEvent(client, date, event) {
   }
 
   let cpf = client.cpf;
-  let response = await fetch(`http://localhost:3000/clients?id=${cpf}`);
+  let response = await fetch(`http://localhost:8080/caregiver/${cpf}`);
   const clientJson = await response.json();
 
   let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
@@ -260,32 +271,52 @@ async function addEvent(client, date, event) {
   if (date in clientCalendar) {
     console.log("date already exists in calendar");
     // A data já existe no calendário, adiciona o evento à lista de eventos dessa data
-    clientCalendar[date].push(event);
-  } else {
+    //clientCalendar[date].push(event);
+  } //else {
     // A data não existe no calendário, cria a chave e adiciona o evento
-    clientCalendar[date] = [event];
-  }
+    //clientCalendar[date] = [event];
+  //}
 
   // Atualiza o calendário do cliente no servidor
-  fetch(`http://localhost:3000/clients/${cpf}`, {
-    method: "PATCH",
+
+
+  fetch(`http://localhost:8080/patient/schedule/${cpf}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": localStorage.getItem("token")
     },
     body: JSON.stringify({
-      calendar: clientCalendar,
+      date: date,
+      time: event.hour,
+      observation: event.observation,
+      category: event.category
     }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      alert("Evento adicionado com sucesso!"); //to the user
-      isEditingAgenda = true;
-      console.log("Calendário atualizado:", data); //to the developer
-    })
-    .catch((error) => {
-      alert("Erro ao atualizar o calendário!"); //to the user
-      console.error("Erro ao atualizar o calendário:", error); //to developer
+    .then((response) => {
+      if (response.status === 200){
+        alert("Evento adicionado com sucesso!"); //to the user
+        console.log("Calendário atualizado"); //to the developer
+        window.location = "dashboard.html";
+        return
+      } else {
+        alert("Erro ao atualizar o calendário!"); //to the user
+        console.error("Erro ao atualizar o calendário"); //to developer
+      }
     });
+
+    
+
+    //.then((response) => response.json())
+    //.then((data) => {
+    //  alert("Evento adicionado com sucesso!"); //to the user
+    //  isEditingAgenda = true;
+    //  console.log("Calendário atualizado:", data); //to the developer
+    //})
+    //.catch((error) => {
+    //  alert("Erro ao atualizar o calendário!"); //to the user
+    //  console.error("Erro ao atualizar o calendário:", error); //to developer
+    //});
 }
 
 //OPEN PATIENT PROFILE
