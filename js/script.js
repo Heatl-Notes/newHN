@@ -30,7 +30,7 @@ function login() {
   });
 
   async function sendLogin(user) {
-    let url = "http://localhost:3000/login"; //end point
+    let url = "http://localhost:8080/login"; //end point
     const email = user.email;
     const password = user.password;
 
@@ -56,7 +56,7 @@ function login() {
         })
         .then((data) => {
           // Lógica para lidar com a resposta do servidor
-          localStorage.setItem("token", data.token);
+          localStorage.setItem("token", data.tokenJWT);
           localStorage.setItem("userCpf", data.userCpf);
           localStorage.setItem("userName", data.userName);
         })
@@ -84,14 +84,15 @@ function createUser() {
   else
     create({
       email: document.getElementById("signup-email").value,
-      cpf: document.getElementById("signup-cpf").value,
       password: document.getElementById("signup-password").value,
+      confirmPassword: document.getElementById("signup-password-confirmation").value,
+      cpf: document.getElementById("signup-cpf").value,
       name: document.getElementById("signup-name").value,
-      lastName: document.getElementById("signup-lastname").value,
+      lastname: document.getElementById("signup-lastname").value,
     });
 }
 async function create(user) {
-  let url = ""; //end point
+  let url = "http://localhost:8080/cadastro"; //end point
 
   try {
     let response = await fetch(url, {
