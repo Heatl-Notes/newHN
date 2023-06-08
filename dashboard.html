@@ -12,40 +12,49 @@
     <main>
       <nav>
         <div class="user-info">
-          <img
-            class="user-avatar"
-            src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png"
-            alt="User Avatar" />
-          <h1 style="color: white">Ronaldo Cuidador</h1>
+          <img class="user-avatar" src="assets/logoHN.jpg" alt="User Avatar" />
+          <h1 id="clientName" style="color: white"></h1>
         </div>
         <ul>
           <li>
-            <button onclick="loadPatients()" class="nav-btn active"><strong>
-              Pacientes</strong>
+            <button onclick="loadPatients()" class="nav-btn active">
+              <strong> Pacientes</strong>
             </button>
           </li>
           <li>
-            <button onclick="openAgenda()" class="nav-btn"><strong>Agenda</strong></button>
+            <button onclick="openAgenda()" class="nav-btn">
+              <strong>Agenda</strong>
+            </button>
           </li>
-          <li>
-            <button onclick="openProfile()" class="nav-btn"><strong>Cadastro</button></strong>
-          </li>
-         
+          <!--
+            <li>
+              <button onclick="openProfile()" class="nav-btn"><strong>Cadastro</button></strong>
+            </li>
+          -->
         </ul>
       </nav>
 
       <div class="main-content"></div>
-     
 
       <div class="popup" id="addPatientPopup">
         <span class="closeButton">X Fechar</span>
         <h2>Adicionar Paciente</h2>
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" required>
+        <input
+          type="text"
+          id="cpf"
+          minlength="11"
+          maxlength="11"
+          pattern="[0-9]{11}"
+          required />
         <label for="name">NOME:</label>
-        <input type="text" id="name" required>
+        <input type="text" id="name" required />
         <label for="age">IDADE:</label>
-        <input type="number" id="age" required>
+        <input type="number" id="age" required />
+        <label for="name">COMORBIDADES:</label>
+        <input type="text" id="comorbitities" required />
+        <label for="name">PROCEDIMENTOS:</label>
+        <input type="text" id="complexProcedures" required />
         <button id="confirmButton">CONFIRMAR</button>
       </div>
 
@@ -53,23 +62,30 @@
         <h1 id="agendaName" class="center-content"></h1>
         <span id="close-agenda-button" class="closeButton">X</span>
         <div style="display: flex" class="name-patient-profile">
-            <input class="agenda-input" type="date" id="date" />
-            <input class="agenda-input" type="time" id="time"/>
-            <input class="agenda-input" type="text" id="description" placeholder="Descrição" />
-            <select class="agenda-input" id="typeOfEvent">
-              <option value="alimentacao">Alimentação</option>
-              <option value="remedios">Remédios</option>
-              <option value="atividades">Atividades do dia a dia</option>
-            </select>
-            <div class="button-container">
-              <button id="addEventButton"class="add-button">ADD</button>
-            </div>
+          <input class="agenda-input" type="date" id="date" />
+          <input class="agenda-input" type="time" id="time" />
+          <input
+            class="agenda-input"
+            type="text"
+            id="description"
+            placeholder="Descrição" />
+          <select class="agenda-input" id="typeOfEvent">
+            <option value="alimentacao">Alimentação</option>
+            <option value="remedios">Remédios</option>
+            <option value="atividades">Atividades do dia a dia</option>
+          </select>
+          <div class="button-container">
+            <button id="addEventButton" class="add-button">ADD</button>
+          </div>
         </div>
-        <h2 class="center-content">EVENTS</h2>
+        <h2 class="center-content">TAREFAS</h2>
+        <div id="header-list" class="name-patient-profile">
+          <h4>HORARIO</h4>
+          <h4>DESCRICAO</h4>
+          <h4>TIPO</h4>
+        </div>
         <div class="events-agenda"></div>
       </div>
-
-      
 
       <button id="addPatientButton" class="floating-button">
         <span>+</span>

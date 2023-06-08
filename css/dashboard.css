@@ -15,7 +15,7 @@ header {
   right: 0; /* adicionado */
   top: 0; /* adicionado */
 
-  width: calc(100% - 280px); /* adicionado para ocupar a largura completa */
+  width: calc(100% - 299px); /* adicionado para ocupar a largura completa */
   z-index: 1; /* adicionado para ficar acima dos outros elementos */
 }
 
@@ -38,7 +38,7 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 220px;
 }
 
 nav ul {
@@ -71,8 +71,8 @@ nav li {
 }
 
 .user-avatar {
-  width: 100px;
-  height: 70px;
+  width: 180px;
+  height: 120px;
 }
 
 .appointment {
@@ -152,6 +152,7 @@ main {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 15px;
+  font-size: 20px;
 }
 .delete-event-button {
   background-color: rgba(219, 67, 25, 1);
@@ -388,9 +389,15 @@ main {
   width: 70px;
   height: 35px;
   padding-top: 0 !important;
-  margin-left: 230px;
-  margin-top: 0;
+  margin-left: 85%;
+  margin-top: -8%;
   font-weight: bold;
+}
+
+#delete-buttom-patient-card:hover {
+  background-color: rgb(235, 179, 163);
+  cursor: pointer;
+  color: black;
 }
 
 li {
@@ -443,4 +450,12 @@ nav {
 
 #dot-label {
   font-size: 16px;
+}
+
+#header-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+  height: 30px;
 }

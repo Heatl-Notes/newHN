@@ -3,7 +3,6 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
 const db = require("./db.json");
-
 const corsOptions = {
   origin: "*", // Define o cabeçalho "Access-Control-Allow-Origin" para permitir todas as origens
   methods: ["GET", "POST", "PATCH", "DELETE"], // Inclui os métodos HTTP permitidos
@@ -19,8 +18,7 @@ const secretKey = "your-secret-key"; // Chave secreta para assinar os tokens JWT
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  console.log("EMAIL", email);
-  console.log("PASSWORD", password);
+  console.log("tentando logar o EMAIL", email);
 
   // Lógica para autenticar o usuário com base no email e senha fornecidos
   const client = Object.values(db.clients).find(
@@ -34,7 +32,10 @@ app.post("/login", (req, res) => {
 
     // Gerar o token JWT
     const token = jwt.sign({ userID: id, userName: name }, secretKey);
-    res.status(200).json({ token, userID: id, userName: name });
+    console.log(token, id, name);
+    res
+      .status(200)
+      .json({ token, userID: id, userName: name, userCpf: client.cpf });
   } else {
     // Autenticação falhou
     res.status(401).json({ message: "Credenciais inválidas" });
@@ -46,8 +47,76 @@ app.use(express.json());
 
 // Rota para obter todos os pacientes
 app.get("/patients", (req, res) => {
+  const patients = Object.values(db.patients);
+  res.json(patients);
+});
+
+app.get("/patientsAll", (res) => {
   const patients = db.patients;
   res.json(patients);
+});
+
+app.post("/patientsAll", (req, res) => {
+  const newPatient = req.body.patient; // Obtenha os dados do paciente diretamente de req.body
+
+  // Verificar se já existe um paciente com o mesmo CPF
+  if (db.patients[newPatient.cpf]) {
+    return res
+      .status(409)
+      .json({ error: "Um paciente com o mesmo CPF já está cadastrado" });
+  }
+
+  // Adicionar o novo paciente ao banco de dados
+  db.patients[newPatient.cpf] = { ...newPatient };
+
+  const fs = require("fs");
+  fs.writeFile("db.json", JSON.stringify(db), (err) => {
+    if (err) {
+      console.error("Erro ao salvar as alterações no arquivo db.json:", err);
+      res.status(500).json({ error: "Erro ao salvar as alterações" });
+    } else {
+      console.log("Paciente adicionado com sucesso");
+      res.status(201).json({ message: "Paciente adicionado com sucesso" });
+    }
+  });
+});
+
+app.get("/patients/:cpf", (req, res) => {
+  const cpf = req.params.cpf;
+
+  // Lógica para encontrar o paciente pelo CPF no banco de dados
+  const patient = Object.values(db.patients).find(
+    (patient) => patient.cpf === cpf
+  );
+
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.status(404).json({ error: "Paciente não encontrado" });
+  }
+});
+
+app.delete("/patients/", (req, res) => {
+  const cpf = req.body.cpf;
+
+  // Verifica se existe um paciente com o CPF fornecido no banco de dados
+  if (db.patients.hasOwnProperty(cpf)) {
+    // Remove o paciente do banco de dados
+    delete db.patients[cpf];
+
+    const fs = require("fs");
+    fs.writeFile("db.json", JSON.stringify(db), (err) => {
+      if (err) {
+        console.error("Erro ao salvar as alterações no arquivo db.json:", err);
+        res.status(500).json({ error: "Erro ao salvar as alterações" });
+      } else {
+        console.log("Paciente deletado com sucesso");
+        res.json({ message: "Paciente deletado com sucesso" }); // Retorna uma mensagem de sucesso como resposta
+      }
+    });
+  } else {
+    res.status(404).json({ error: "Paciente não encontrado" });
+  }
 });
 
 app.get("/clients", (req, res) => {
