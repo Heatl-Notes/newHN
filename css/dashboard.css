@@ -152,6 +152,7 @@ main {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 15px;
+  font-size: 20px;
 }
 .delete-event-button {
   background-color: rgba(219, 67, 25, 1);
@@ -449,4 +450,12 @@ nav {
 
 #dot-label {
   font-size: 16px;
+}
+
+#header-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+  height: 30px;
 }
