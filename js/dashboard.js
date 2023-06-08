@@ -52,15 +52,16 @@ async function loadPatients() {
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
 
-    let dotElementComorbitities = `<span id="dot" class="green-dot"></span> (NÃO POSSUI)`;
-    let dotElementComplexprocedures = `<span id="dot" class="green-dot"></span> (NÃO PRECISA)`;
+    let dotElementComorbitities = `<span id="dot-label" class="green-dot"></span> (NÃO POSSUI)`;
+    let dotElementComplexprocedures = `<span id="dot-label" class="green-dot"></span> (NÃO PRECISA)`;
 
-    console.log(patient);
-
-    if (patient?.comorbidities.length > 0) {
-      dotElement = `<span class="red-dot"></span> (POSSUI)`;
+    let patientComorbidities = patient.comorbidities;
+    if (patientComorbidities[0].description !== "") {
+      dotElementComorbitities = `<span id="dot" class="red-dot"></span> (POSSUI)`;
     }
-    if (patient?.complexProcedures.length > 0) {
+
+    let patientProcedures = patient.complexProcedures;
+    if (patientProcedures[0].description !== "") {
       dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
     }
 
@@ -346,7 +347,7 @@ function showPatientProfile(patient) {
       <h1 class="name-patient-profile">Sr(a) ${name}</h1>
       <div class=patient-info>
         <h3><u>CPF</u>: ${cpf}</h3>
-        <h3><u>Nome</u>: ${name} COMPLETO?</h3>
+        <h3><u>Nome</u>: ${name}</h3>
         <h3><u>Idade</u>: ${age}</h3>
         <h3><u>Comorbidades</u>: ${comorbiditiesString}</h3>
         <h3><u>Procedimentos</u>: ${complexProceduresString}</h3>
