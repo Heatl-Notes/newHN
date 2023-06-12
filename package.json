@@ -1,0 +1,25 @@
+{
+  "name": "newhn",
+  "version": "1.0.0",
+  "description": "Vamos tentar usar essa branch para desenvolvimento",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Heatl-Notes/newHN.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Heatl-Notes/newHN/issues"
+  },
+  "homepage": "https://github.com/Heatl-Notes/newHN#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0"
+  }
+}

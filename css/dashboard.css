@@ -15,7 +15,7 @@ header {
   right: 0; /* adicionado */
   top: 0; /* adicionado */
 
-  width: calc(100% - 280px); /* adicionado para ocupar a largura completa */
+  width: calc(100% - 299px); /* adicionado para ocupar a largura completa */
   z-index: 1; /* adicionado para ficar acima dos outros elementos */
 }
 
@@ -38,7 +38,7 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 220px;
 }
 
 nav ul {
@@ -71,8 +71,8 @@ nav li {
 }
 
 .user-avatar {
-  width: 100px;
-  height: 70px;
+  width: 180px;
+  height: 120px;
 }
 
 .appointment {
@@ -139,13 +139,63 @@ main {
   width: 300px;
   height: 200px;
   justify-content: center;
-  border: 2px solid rgba(219, 67, 25, 1);
-  padding: 30px;
+  border: 5px solid rgba(219, 67, 25, 1);
+  padding: 40px;
   margin: 5px;
   border-radius: 10px;
   box-shadow: 0 1px;
   display: grid;
   cursor: pointer;
+}
+.events-on-date {
+  background-color: rgb(245, 229, 226);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  font-size: 20px;
+}
+.delete-event-button {
+  background-color: rgba(219, 67, 25, 1);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  right: 0;
+}
+
+.date {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: white;
+  background-color: rgba(219, 67, 25, 1);
+}
+
+.event {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 5px;
+}
+
+.observation {
+  justify-content: flex-start;
+  margin-right: 10px;
+}
+
+.hour,
+.observation,
+.category {
+  margin-right: 10px;
+  color: black;
+  font-weight: bold;
 }
 
 .content-card {
@@ -209,6 +259,17 @@ main {
   border: 1px solid #ccc;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  height: auto;
+}
+.events-agenda {
+  margin-top: 15px;
+  border-radius: 10px;
+  background-color: rgba(219, 67, 25, 1);
+  padding: 10px;
+  top: 0;
+  color: white;
+  display: block;
+  height: auto;
 }
 
 .popup label {
@@ -327,7 +388,74 @@ main {
   border: none;
   width: 70px;
   height: 35px;
-  margin-left: 230px;
-  margin-top: 60px;
+  padding-top: 0 !important;
+  margin-left: 85%;
+  margin-top: -8%;
   font-weight: bold;
+}
+
+#delete-buttom-patient-card:hover {
+  background-color: rgb(235, 179, 163);
+  cursor: pointer;
+  color: black;
+}
+
+li {
+  margin: 0;
+  margin-left: 30px;
+}
+
+nav {
+  height: 100%;
+}
+
+.comorbitities-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.comorbitities-list li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.comorbitities-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.red-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.green-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: green;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+#dot-label {
+  font-size: 16px;
+}
+
+#header-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+  height: 30px;
 }

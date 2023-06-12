@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="./css/style.css">
 	
 <body>
+	<div id="loading-indicator"></div>
 	<div class="wrapper fadeInDown">
 		<div id="formContent">
 		  <!-- Tabs Titles  -->
@@ -21,18 +22,19 @@
 		  <!-- Login Form -->
 		  <form action="javascript:void(0);" id="login-form">
 			<input type="text" id="login-email" class="fadeIn second" name="login" placeholder="e-mail">
-			<input type="text" id="login-password" class="fadeIn third" name="login" placeholder="senha">
+			<input type="password" id="login-password" class="fadeIn third" name="login" placeholder="senha">
 			<input type="submit" id="commit" class="fadeIn fourth" value="Entrar">
 		  </form>
 
+		  
 		  <!-- Cadastro Form -->
-			<form id="signup-form">
+			<form action="javascript:void(0);" id="signup-form">
 				<input type="text" id="signup-name" class="fadeIn second" name="nome" placeholder="Nome">
 				<input type="text" id="signup-lastname" class="fadeIn second" name="nome" placeholder="Sobrenome">
 				<input type="text" id="signup-email" class="fadeIn third" name="email" placeholder="E-mail">
 				<input type="text" id="signup-cpf" class="fadeIn third" name="cpf" placeholder="CPF">
-				<input type="text" id="signup-password" class="fadeIn third" name="login" placeholder="Senha">
-				<input type="text" id="signup-password-confirmation" class="fadeIn third" name="login" placeholder="Confirme senha">
+				<input type="password" id="signup-password" class="fadeIn third" name="login" placeholder="Senha">
+				<input type="password" id="signup-password-confirmation" class="fadeIn third" name="login" placeholder="Confirme senha">
 				<input type="submit" id="createUserButton" class="fadeIn fourth" value="Cadastrar">
 			</form>
 	  
@@ -45,4 +47,4 @@
 	  </div>
 </body>
 <script src="./js/script.js"></script>
-</html>
+</html>		
