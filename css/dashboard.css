@@ -247,6 +247,22 @@ main {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.popup-edit {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 550px;
+  padding: 45px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
 .popup-agenda {
   display: none;
   position: fixed;
@@ -316,6 +332,20 @@ main {
   top: 5%;
   font-size: 20px;
   background-color: rgba(219, 67, 25, 1);
+  margin: 0;
+  font-weight: bold;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+}
+
+.editButton {
+  cursor: pointer;
+  position: absolute;
+  right: 8%;
+  top: 5%;
+  font-size: 20px;
+  background-color: #343a40;
   margin: 0;
   font-weight: bold;
   padding: 12px;

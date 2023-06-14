@@ -79,25 +79,6 @@ async function loadPatients() {
   });
 }
 
-/**
- *
- */
-
-async function openProfile() {
-  closeAgenda();
-  closeButton.addEventListener("click", () => {
-    popupElemento.remove();
-  });
-
-  let localCourrentClient = await globalCourrentClient;
-  var novoElemento = document.createElement("div");
-  novoElemento.className = "profile-card";
-  novoElemento.innerHTML = `<h1>Cuidador</h1><br/><h2>Nome: ${localCourrentClient?.name} </h2><h2>Experiência: ${localCourrentClient.monthsExperience} </h2><h2>CPF:  ${localCourrentClient.cpf}</h2><h2>Telefone: ${localCourrentClient.phone} </h2><h2>Email:  ${localCourrentClient.email}</h2>`;
-
-  var main = document.querySelector(".main-content");
-  main.innerHTML = "";
-  main.appendChild(novoElemento);
-}
 function closeAgenda() {
   let agendaDiv = document.querySelector(".popup-agenda");
   agendaDiv.style.display = "none";
@@ -107,16 +88,12 @@ async function deleteEventOnClick(event, date) {
   event.preventDefault();
   let localCourrentClient = await globalCourrentClient;
   let events = localCourrentClient?.calendar;
+
   delete events[date];
 
   event.preventDefault();
-
   const client = await globalCourrentClient; // Obtenha o ID do cliente da maneira adequada
-
-  console.log("DATE", date);
   const url = `http://localhost:3000/clients/${client?.cpf}/calendar/${date}`;
-  console.log("URL", url);
-
   fetch(url, {
     method: "DELETE",
     headers: {
@@ -150,8 +127,6 @@ async function loadEvents() {
     a.date - b.date;
   });
 
-  console.log(events);
-
   let eventsDiv = document.querySelector(".events-agenda");
   eventsDiv.innerHTML = "";
 
@@ -161,7 +136,6 @@ async function loadEvents() {
     eventsOnDate.sort((a, b) => {
       a.time - b.time;
     });
-    console.log(eventsOnDate);
     let eventsOnDateDiv = document.createElement("div");
     eventsOnDateDiv.className = "events-on-date";
 
@@ -240,13 +214,6 @@ async function openAgenda() {
     } catch (error) {
       console.log(error);
     }
-
-    // if (currentClient.calendar[date]) {
-    //   console.log(currentClient.calendar[date]);
-    //   currentClient.calendar[date].push(eventObj);
-    // } else {
-    //   currentClient.calendar[date] = [eventObj];
-    // }
   });
 }
 function eventParamsCheck(date, event) {
@@ -279,8 +246,7 @@ async function addEvent(client, date, event) {
   //clientCalendar[date] = [event];
   //}
 
-  // Atualiza o calendário do cliente no servidor
-
+  // Update the client calendar
   fetch(`http://localhost:8080/patient/schedule/${cpf}`, {
     method: "PUT",
     headers: {
@@ -304,28 +270,20 @@ async function addEvent(client, date, event) {
       console.error("Erro ao atualizar o calendário"); //to developer
     }
   });
-
-  //.then((response) => response.json())
-  //.then((data) => {
-  //  alert("Evento adicionado com sucesso!"); //to the user
-  //  isEditingAgenda = true;
-  //  console.log("Calendário atualizado:", data); //to the developer
-  //})
-  //.catch((error) => {
-  //  alert("Erro ao atualizar o calendário!"); //to the user
-  //  console.error("Erro ao atualizar o calendário:", error); //to developer
-  //});
 }
 
-//OPEN PATIENT PROFILE
+// showPatientProfile: Function that opens the popup to show the patient complete profile
 function showPatientProfile(patient) {
   const cpf = patient?.cpf;
   const name = patient?.name;
   const age = patient?.age;
+  const comorbiditiesNames = [];
+  const complexProceduresNames = [];
 
   let comorbiditiesList = patient?.comorbidities;
   let comorbiditiesString = "";
   comorbiditiesList.forEach((comorbidit) => {
+    comorbiditiesNames.push(comorbidit.description.trim());
     comorbiditiesString += comorbidit.description.trim();
     if (comorbidit != comorbiditiesList[comorbiditiesList.length - 1]) {
       comorbiditiesString += ", ";
@@ -334,6 +292,7 @@ function showPatientProfile(patient) {
   let proceduresList = patient?.complexProcedures;
   let complexProceduresString = "";
   proceduresList.forEach((procedure) => {
+    complexProceduresNames.push(procedure.description.trim());
     complexProceduresString += procedure.description.trim();
     if (procedure != proceduresList[proceduresList.length - 1]) {
       complexProceduresString += ", ";
@@ -344,6 +303,7 @@ function showPatientProfile(patient) {
   popupElemento.className = "popup";
   popupElemento.innerHTML = `
       <span class="closeButton">X</span>
+      <span class="editButton">EDITAR</span>
       <h1 class="name-patient-profile">Sr(a) ${name}</h1>
       <div class=patient-info>
         <h3><u>CPF</u>: ${cpf}</h3>
@@ -355,9 +315,36 @@ function showPatientProfile(patient) {
     `;
   popupElemento.style.display = "block";
   document.body.appendChild(popupElemento);
+
+  const editButton = popupElemento.querySelector(".editButton");
   const closeButton = popupElemento.querySelector(".closeButton");
+  const editPopup = document.createElement("div");
+  editPopup.className = "popup-edit";
+
+  popupElemento.appendChild(editPopup);
+
   closeButton.addEventListener("click", () => {
     popupElemento.remove();
+  });
+
+  editButton.addEventListener("click", () => {
+    editPopup.style.display = "block";
+    editPopup.innerHTML = `
+      <h3>Editar paciente</h3>
+      <h4>Nome</h4>
+      <input value="${patient?.name}" class="agenda-input" type="text"/>
+      <h4>Idade</h4>
+      <input value="${patient?.age}" class="agenda-input" type="text"/>
+      <h4>Comorbidade</h4>
+      <input value="${comorbiditiesNames.join(
+        ", "
+      )}" class="agenda-input" type="text"/>
+      <h4>Procedimentos</h4>
+      <input value="${complexProceduresNames.join(
+        ", "
+      )}" class="agenda-input" type="text"/>
+      <button id="confirmButton">CONFIRMAR EDICAO</button>
+    `;
   });
 }
 
@@ -443,12 +430,11 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
     });
 
     if (response.ok) {
-      // Se o paciente foi adicionado com sucesso
-      //reload patients
-      loadPatients();
+      // If the patient was added successfully
+      loadPatients(); // Reload the patients list to show the new patient
       alert("Paciente adicionado com sucesso!");
     } else {
-      // Se ocorreu algum erro ao adicionar o paciente
+      // If the patient was NOT added successfully
       alert("Erro ao adicionar paciente");
     }
   } catch (error) {
@@ -456,7 +442,7 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
   }
 }
 
-//DELETE PATIENTS
+//method to delete patient, called when the delete RED button is clicked, on patient card
 function deletePatientOnClick(event, cpf) {
   let cpfString = cpf.toString().padStart(11, "0");
   console.log("deletePatientOnClick", cpfString);
@@ -510,7 +496,7 @@ async function deletePatient(cpfToDelete) {
 }
 
 /**
- * funtion to logout
+ * funtion to logout the caregiver
  */
 function logout() {
   localStorage.removeItem("token");
@@ -528,3 +514,22 @@ async function getName() {
   nameDisplay.innerHTML = `Sr(a). ${userName}`;
 }
 window.addEventListener("load", getName);
+
+/**
+ * Method to open the caregiver profile
+ */
+// async function openProfile() {
+//   closeAgenda();
+//   closeButton.addEventListener("click", () => {
+//     popupElemento.remove();
+//   });
+
+//   let localCourrentClient = await globalCourrentClient;
+//   var novoElemento = document.createElement("div");
+//   novoElemento.className = "profile-card";
+//   novoElemento.innerHTML = `<h1>Cuidador</h1><br/><h2>Nome: ${localCourrentClient?.name} </h2><h2>Experiência: ${localCourrentClient.monthsExperience} </h2><h2>CPF:  ${localCourrentClient.cpf}</h2><h2>Telefone: ${localCourrentClient.phone} </h2><h2>Email:  ${localCourrentClient.email}</h2>`;
+
+//   var main = document.querySelector(".main-content");
+//   main.innerHTML = "";
+//   main.appendChild(novoElemento);
+// }
