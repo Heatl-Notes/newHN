@@ -120,11 +120,27 @@ async function deleteEventOnClick(event, date) {
 }
 
 async function loadEvents() {
+  let currentDate = new Date();
+  let year = currentDate.getFullYear();
+  let month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  let day = currentDate.getDate();
+  let todaysDate = year + "-" + month + "-" + day;
+
   let localCourrentClient = await globalCourrentClient;
   let events = localCourrentClient?.calendar;
 
-  events.sort((a, b) => {
-    a.date - b.date;
+  events = events.filter(function (event) {
+    return event.date >= todaysDate;
+  });
+
+  events = events.sort(function (eventA, eventB) {
+    if (eventA.date < eventB.date) {
+      return -1;
+    } else if (eventA.date > eventB.date) {
+      return 1;
+    } else {
+      return 0;
+    }
   });
 
   let eventsDiv = document.querySelector(".events-agenda");
@@ -133,8 +149,14 @@ async function loadEvents() {
   for (let i in events) {
     let date = events[i].date;
     let eventsOnDate = events[i].schedules;
-    eventsOnDate.sort((a, b) => {
-      a.time - b.time;
+    eventsOnDate = eventsOnDate.sort(function (eventA, eventB) {
+      if (eventA.time < eventB.time) {
+        return -1;
+      } else if (eventA.time > eventB.time) {
+        return 1;
+      } else {
+        return 0;
+      }
     });
     let eventsOnDateDiv = document.createElement("div");
     eventsOnDateDiv.className = "events-on-date";
@@ -205,7 +227,12 @@ async function openAgenda() {
     time = timeElement?.value;
   });
 
-  let typeOfEvent = document.querySelector("#typeOfEvent").value;
+  let typeOfEventElement = document.querySelector("#typeOfEvent");
+  let typeOfEvent = typeOfEventElement.value;
+
+  typeOfEventElement.addEventListener("change", function () {
+    typeOfEvent = typeOfEventElement.value;
+  });
 
   let addEventButton = document.querySelector("#addEventButton");
   addEventButton?.addEventListener("click", () => {
@@ -336,6 +363,7 @@ function showPatientProfile(patient) {
   editButton.addEventListener("click", () => {
     editPopup.style.display = "block";
     editPopup.innerHTML = `
+      <button id="closeButton">&#10006;</button>
       <h3>Editar paciente</h3>
       <h4>Nome</h4>
       <input id="edit-patient-name" value="${
@@ -357,6 +385,10 @@ function showPatientProfile(patient) {
     `;
 
     const confirmButton = editPopup.querySelector("#confirmButton");
+    const closeButton = editPopup.querySelector("#closeButton");
+    closeButton.addEventListener("click", () => {
+      editPopup.style.display = "none";
+    });
     confirmButton.addEventListener("click", () => {
       let patientName = editPopup.querySelector("#edit-patient-name").value;
       let patientAge = editPopup.querySelector("#edit-patient-age").value;

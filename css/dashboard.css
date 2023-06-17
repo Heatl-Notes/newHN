@@ -254,13 +254,22 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 200px;
-  height: 550px;
+  height: 450px;
   padding: 45px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
+}
+
+.popup-edit h4 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.popup-edit input {
+  margin-bottom: 15px;
 }
 
 .popup-agenda {
@@ -488,4 +497,19 @@ nav {
   align-items: center;
   margin-right: 10px;
   height: 30px;
+}
+
+#closeButton {
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(219, 67, 25, 1);
+  color: white;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
