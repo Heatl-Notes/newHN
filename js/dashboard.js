@@ -159,6 +159,12 @@ async function loadEvents() {
 }
 
 async function openAgenda() {
+  let popupElemento = document.querySelector(".popup");
+
+  if (popupElemento) {
+    popupElemento.remove();
+  }
+
   let agendaDivName = document.querySelector("#agendaName");
   let localCourrentClient = await globalCourrentClient;
   agendaDivName.innerHTML = `Agenda de ${localCourrentClient?.name}`;
@@ -332,20 +338,87 @@ function showPatientProfile(patient) {
     editPopup.innerHTML = `
       <h3>Editar paciente</h3>
       <h4>Nome</h4>
-      <input value="${patient?.name}" class="agenda-input" type="text"/>
+      <input id="edit-patient-name" value="${
+        patient?.name
+      }" class="agenda-input" type="text"/>
       <h4>Idade</h4>
-      <input value="${patient?.age}" class="agenda-input" type="text"/>
+      <input id="edit-patient-age" value="${
+        patient?.age
+      }" class="agenda-input" type="text"/>
       <h4>Comorbidade</h4>
-      <input value="${comorbiditiesNames.join(
+      <input id="edit-patient-comorbidities" value="${comorbiditiesNames.join(
         ", "
       )}" class="agenda-input" type="text"/>
       <h4>Procedimentos</h4>
-      <input value="${complexProceduresNames.join(
+      <input id="edit-patient-procedures" value="${complexProceduresNames.join(
         ", "
       )}" class="agenda-input" type="text"/>
       <button id="confirmButton">CONFIRMAR EDICAO</button>
     `;
+
+    const confirmButton = editPopup.querySelector("#confirmButton");
+    confirmButton.addEventListener("click", () => {
+      let patientName = editPopup.querySelector("#edit-patient-name").value;
+      let patientAge = editPopup.querySelector("#edit-patient-age").value;
+      let patientComorbidities = editPopup.querySelector(
+        "#edit-patient-comorbidities"
+      ).value;
+      let patientProcedures = editPopup.querySelector(
+        "#edit-patient-procedures"
+      ).value;
+
+      editPatient(
+        patient,
+        patientName,
+        patientAge,
+        patientComorbidities,
+        patientProcedures
+      );
+    });
   });
+}
+
+async function editPatient(
+  patient,
+  patientName,
+  patientAge,
+  patientComorbidities,
+  patientProced
+) {
+  let comorbititiesList = [];
+  let complexProceduresList = [];
+
+  patientComorbidities.split(",").forEach((comorbiditie) => {
+    comorbititiesList.push({ description: comorbiditie });
+  });
+
+  patientProced.split(",").forEach((procedure) => {
+    complexProceduresList.push({ description: procedure });
+  });
+
+  const patientUpdated = {
+    cpf: patient.cpf,
+    name: patientName,
+    age: patientAge,
+    comorbidities: comorbititiesList,
+    complexProcedures: complexProceduresList,
+  };
+
+  const editedPatient = await fetch(`http://localhost:8080/patient`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+    body: JSON.stringify(patientUpdated),
+  });
+  if (editedPatient.status === 200) {
+    alert("O paciente foi atualizado com sucesso!");
+    window.location.reload();
+    return; // ends the function
+  } else {
+    alert("Ocorreu um erro ao atualizar o paciente");
+  }
 }
 
 //ADD PATIENTS
