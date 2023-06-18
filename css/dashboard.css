@@ -214,9 +214,9 @@ main {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  width: 200px;
+  height: 40px;
+  border-radius: 15px;
   background-color: rgba(219, 67, 25, 1);
   color: white;
   font-size: 24px;
@@ -227,6 +227,7 @@ main {
   border: none;
   outline: none;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .floating-button span {
@@ -512,4 +513,31 @@ nav {
   border: none;
   outline: none;
   cursor: pointer;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.tooltip .tooltiptext {
+  border: 2px solid black; /* Define a borda com 2px de largura e cor preta */
+  font-weight: bold; /* Torna o texto em negrito */
+  visibility: visible;
+  width: 200px;
+  height: 100px;
+  background-color: rgb(235, 179, 163);
+  color: black;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 300%;
+  left: 50%;
+  transform: translateX(-60%);
+  opacity: 0;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+  line-height: 1.5;
+  overflow: auto;
 }
