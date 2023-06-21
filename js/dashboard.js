@@ -98,7 +98,7 @@ async function deleteEventOnClick(event, date) {
 
   event.preventDefault();
   const client = await globalCourrentClient; // Obtenha o ID do cliente da maneira adequada
-  const url = `http://localhost:3000/clients/${client?.cpf}/calendar/${date}`;
+  const url = `https://health-notes-47645d4f2894.herokuapp.com/clients/${client?.cpf}/calendar/${date}`;
   fetch(url, {
     method: "DELETE",
     headers: {
