@@ -214,9 +214,9 @@ main {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  width: 200px;
+  height: 40px;
+  border-radius: 15px;
   background-color: rgba(219, 67, 25, 1);
   color: white;
   font-size: 24px;
@@ -227,6 +227,7 @@ main {
   border: none;
   outline: none;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .floating-button span {
@@ -245,6 +246,31 @@ main {
   border: 1px solid #ccc;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-edit {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 450px;
+  padding: 45px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
+.popup-edit h4 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.popup-edit input {
+  margin-bottom: 15px;
 }
 
 .popup-agenda {
@@ -316,6 +342,20 @@ main {
   top: 5%;
   font-size: 20px;
   background-color: rgba(219, 67, 25, 1);
+  margin: 0;
+  font-weight: bold;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+}
+
+.editButton {
+  cursor: pointer;
+  position: absolute;
+  right: 8%;
+  top: 5%;
+  font-size: 20px;
+  background-color: #343a40;
   margin: 0;
   font-weight: bold;
   padding: 12px;
@@ -458,4 +498,46 @@ nav {
   align-items: center;
   margin-right: 10px;
   height: 30px;
+}
+
+#closeButton {
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(219, 67, 25, 1);
+  color: white;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.tooltip .tooltiptext {
+  border: 2px solid black; /* Define a borda com 2px de largura e cor preta */
+  font-weight: bold; /* Torna o texto em negrito */
+  visibility: visible;
+  width: 200px;
+  height: 100px;
+  background-color: rgb(235, 179, 163);
+  color: black;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 300%;
+  left: 50%;
+  transform: translateX(-60%);
+  opacity: 0;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+  line-height: 1.5;
+  overflow: auto;
 }
