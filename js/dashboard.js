@@ -130,6 +130,7 @@ async function loadEvents() {
   let events = localCourrentClient?.calendar;
 
   events = events.filter(function (event) {
+    console.log(event.date >= todaysDate);
     return event.date >= todaysDate;
   });
 
@@ -163,8 +164,8 @@ async function loadEvents() {
 
     let dateDiv = document.createElement("div");
     dateDiv.className = "date";
-    dateDiv.innerHTML = date;
-    //dateDiv.innerHTML += `<button class="delete-event-button" onclick="deleteEventOnClick(event, '${date}')">X</button>`;
+    // dateDiv.innerHTML += `<button class="delete-event-button" onclick="deleteEventOnClick(event, '${date}')">X</button>`;
+    dateDiv.innerHTML += date;
 
     eventsOnDateDiv.appendChild(dateDiv);
 
@@ -638,3 +639,18 @@ window.addEventListener("load", getName);
 //   main.innerHTML = "";
 //   main.appendChild(novoElemento);
 // }
+
+document.addEventListener("DOMContentLoaded", function () {
+  var tooltips = document.querySelectorAll(".tooltip");
+
+  tooltips.forEach(function (tooltip) {
+    var tooltipText = tooltip.querySelector(".tooltiptext");
+    tooltipText.style.visibility = "visible";
+    tooltipText.style.opacity = 1;
+
+    setTimeout(function () {
+      tooltipText.style.visibility = "hidden";
+      tooltipText.style.opacity = 0;
+    }, 8000);
+  });
+});
