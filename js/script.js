@@ -30,7 +30,7 @@ function login() {
   });
 
   async function sendLogin(user) {
-    let url = "http://localhost:8080/login"; //end point
+    let url = "https://health-notes-47645d4f2894.herokuapp.com/login"; //end point
     const email = user.email;
     const password = user.password;
 
@@ -92,7 +92,7 @@ function createUser() {
     });
 }
 async function create(user) {
-  let url = "http://localhost:8080/cadastro"; //end point
+  let url = "https://health-notes-47645d4f2894.herokuapp.com/cadastro"; //end point
 
   try {
     let response = await fetch(url, {

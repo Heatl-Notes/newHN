@@ -3,7 +3,7 @@ const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient() {
   let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
-  let client = await fetch(`http://localhost:8080/caregiver/${userCpf}`); //fetch patients from api
+  let client = await fetch(`https://health-notes-47645d4f2894.herokuapp.com/caregiver/${userCpf}`); //fetch patients from api
   let clientJson = await client.json();
 
   return clientJson;
@@ -38,7 +38,7 @@ async function loadPatients() {
   //run the command:json-server --watch db.json (in this directory)
 
   //REAL CODE
-  let patients = await fetch("http://localhost:8080/patient", {
+  let patients = await fetch("https://health-notes-47645d4f2894.herokuapp.com/patient", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -265,7 +265,7 @@ async function addEvent(client, date, event) {
   }
 
   let cpf = client.cpf;
-  let response = await fetch(`http://localhost:8080/caregiver/${cpf}`);
+  let response = await fetch(`https://health-notes-47645d4f2894.herokuapp.com/caregiver/${cpf}`);
   const clientJson = await response.json();
 
   let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
@@ -280,7 +280,7 @@ async function addEvent(client, date, event) {
   //}
 
   // Update the client calendar
-  fetch(`http://localhost:8080/patient/schedule/${cpf}`, {
+  fetch(`https://health-notes-47645d4f2894.herokuapp.com/patient/schedule/${cpf}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -436,7 +436,7 @@ async function editPatient(
     complexProcedures: complexProceduresList,
   };
 
-  const editedPatient = await fetch(`http://localhost:8080/patient`, {
+  const editedPatient = await fetch(`https://health-notes-47645d4f2894.herokuapp.com/patient`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -511,7 +511,7 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
 
   try {
     const alreadyRegistered = await fetch(
-      `http://localhost:8080/patient/${cpf}`,
+      `https://health-notes-47645d4f2894.herokuapp.com/patient/${cpf}`,
       {
         method: "GET",
         headers: {
@@ -525,7 +525,7 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
       return; // Retorna sem adicionar o paciente, encontrou um com o mesmo CPF
     }
 
-    const response = await fetch("http://localhost:8080/patient", {
+    const response = await fetch("https://health-notes-47645d4f2894.herokuapp.com/patient", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -559,7 +559,7 @@ async function deletePatient(cpfToDelete) {
   try {
     // Verificar se o paciente existe antes de excluir
     const response = await fetch(
-      `http://localhost:8080/patient/${cpfToDelete}`,
+      `https://health-notes-47645d4f2894.herokuapp.com/patient/${cpfToDelete}`,
       {
         method: "GET",
         headers: {
@@ -578,7 +578,7 @@ async function deletePatient(cpfToDelete) {
 
     // Excluir o paciente caso seja encontrado
     const deleteResponse = await fetch(
-      `http://localhost:8080/patient/${patientCpf}`,
+      `https://health-notes-47645d4f2894.herokuapp.com/patient/${patientCpf}`,
       {
         method: "DELETE",
         body: JSON.stringify({ cpf: patientCpf }),
