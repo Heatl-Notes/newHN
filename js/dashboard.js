@@ -3,7 +3,9 @@ const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient() {
   let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
-  let client = await fetch(`https://health-notes-47645d4f2894.herokuapp.com/caregiver/${userCpf}`); //fetch patients from api
+  let client = await fetch(
+    `https://health-notes-47645d4f2894.herokuapp.com/caregiver/${userCpf}`
+  ); //fetch patients from api
   let clientJson = await client.json();
 
   return clientJson;
@@ -38,13 +40,16 @@ async function loadPatients() {
   //run the command:json-server --watch db.json (in this directory)
 
   //REAL CODE
-  let patients = await fetch("https://health-notes-47645d4f2894.herokuapp.com/patient", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-  }); //fetch patients from api
+  let patients = await fetch(
+    "https://health-notes-47645d4f2894.herokuapp.com/patient",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    }
+  ); //fetch patients from api
   let patientsJson = await patients.json();
   let innerH = "";
   let cpf = 0;
@@ -266,7 +271,9 @@ async function addEvent(client, date, event) {
   }
 
   let cpf = client.cpf;
-  let response = await fetch(`https://health-notes-47645d4f2894.herokuapp.com/caregiver/${cpf}`);
+  let response = await fetch(
+    `https://health-notes-47645d4f2894.herokuapp.com/caregiver/${cpf}`
+  );
   const clientJson = await response.json();
 
   let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
@@ -281,19 +288,22 @@ async function addEvent(client, date, event) {
   //}
 
   // Update the client calendar
-  fetch(`https://health-notes-47645d4f2894.herokuapp.com/patient/schedule/${cpf}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-    body: JSON.stringify({
-      date: date,
-      time: event.hour,
-      observation: event.observation,
-      category: event.category,
-    }),
-  }).then((response) => {
+  fetch(
+    `https://health-notes-47645d4f2894.herokuapp.com/patient/schedule/${cpf}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        date: date,
+        time: event.hour,
+        observation: event.observation,
+        category: event.category,
+      }),
+    }
+  ).then((response) => {
     if (response.status === 200) {
       alert("Evento adicionado com sucesso!"); //to the user
       console.log("Calendário atualizado"); //to the developer
@@ -437,14 +447,17 @@ async function editPatient(
     complexProcedures: complexProceduresList,
   };
 
-  const editedPatient = await fetch(`https://health-notes-47645d4f2894.herokuapp.com/patient`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-    body: JSON.stringify(patientUpdated),
-  });
+  const editedPatient = await fetch(
+    `https://health-notes-47645d4f2894.herokuapp.com/patient`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+      body: JSON.stringify(patientUpdated),
+    }
+  );
   if (editedPatient.status === 200) {
     alert("O paciente foi atualizado com sucesso!");
     window.location.reload();
@@ -526,14 +539,17 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
       return; // Retorna sem adicionar o paciente, encontrou um com o mesmo CPF
     }
 
-    const response = await fetch("https://health-notes-47645d4f2894.herokuapp.com/patient", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
-      },
-      body: JSON.stringify(newPatient),
-    });
+    const response = await fetch(
+      "https://health-notes-47645d4f2894.herokuapp.com/patient",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+        body: JSON.stringify(newPatient),
+      }
+    );
 
     if (response.ok) {
       // If the patient was added successfully

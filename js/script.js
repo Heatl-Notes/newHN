@@ -22,12 +22,18 @@ function login() {
   sendLogin({
     email: emailForm,
     password: passwordForm,
-  }).finally(() => {
-    setTimeout(() => {
-      alert("Senha ou email incorretos!");
-      hideLoadingIndicator();
-    }, 2000);
-  });
+  })
+    .finally(() => {
+      setTimeout(() => {
+        hideLoadingIndicator();
+      }, 2000);
+    })
+    .catch(() => {
+      setTimeout(() => {
+        alert("Senha ou email incorretos!");
+        hideLoadingIndicator();
+      }, 2000);
+    });
 
   async function sendLogin(user) {
     let url = "https://health-notes-47645d4f2894.herokuapp.com/login"; //end point
@@ -85,7 +91,8 @@ function createUser() {
     create({
       email: document.getElementById("signup-email").value,
       password: document.getElementById("signup-password").value,
-      confirmPassword: document.getElementById("signup-password-confirmation").value,
+      confirmPassword: document.getElementById("signup-password-confirmation")
+        .value,
       cpf: document.getElementById("signup-cpf").value,
       name: document.getElementById("signup-name").value,
       lastname: document.getElementById("signup-lastname").value,
