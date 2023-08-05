@@ -125,7 +125,7 @@ async function deleteEventOnClick(event, date) {
 }
 
 // TODO: Implementar a função de deletar um paciente
-// TODO: Implementar a filtos de pacientes
+// TODO: Implementar a filtos
 async function loadEvents() {
   let currentDate = new Date();
   let year = currentDate.getFullYear();
@@ -143,9 +143,12 @@ async function loadEvents() {
   });
 
   events = events.sort(function (eventA, eventB) {
-    if (eventA.date < eventB.date) {
+    let date1 = new Date(eventA.date);
+    let date2 = new Date(eventB.date);
+
+    if (date1 < date2) {
       return -1;
-    } else if (eventA.date > eventB.date) {
+    } else if (date1 > date2) {
       return 1;
     } else {
       return 0;

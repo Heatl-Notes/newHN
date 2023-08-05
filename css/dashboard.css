@@ -289,6 +289,25 @@ main {
   max-height: 800px;
   height: auto;
 }
+
+/* Estilizar a barra de rolagem no Chrome, Safari e Edge */
+.popup-agenda::-webkit-scrollbar {
+  width: 10px; /* Largura da barra de rolagem */
+}
+
+.popup-agenda::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Cor de fundo da área da barra de rolagem */
+}
+
+.popup-agenda::-webkit-scrollbar-thumb {
+  background-color: rgb(225, 95, 60);
+  border-radius: 5px;
+}
+
+.popup-agenda::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(219, 67, 25, 1);
+}
+
 .events-agenda {
   margin-top: 15px;
   border-radius: 10px;
