@@ -124,6 +124,8 @@ async function deleteEventOnClick(event, date) {
   console.log(`Excluir evento na data: ${date}`);
 }
 
+// TODO: Implementar a função de deletar um paciente
+// TODO: Implementar a filtos de pacientes
 async function loadEvents() {
   let currentDate = new Date();
   let year = currentDate.getFullYear();
@@ -135,8 +137,9 @@ async function loadEvents() {
   let events = localCourrentClient?.calendar;
 
   events = events.filter(function (event) {
-    console.log(event.date >= todaysDate);
-    return event.date >= todaysDate;
+    let date1 = new Date(event.date);
+    let date2 = new Date(todaysDate);
+    return date2 <= date1;
   });
 
   events = events.sort(function (eventA, eventB) {

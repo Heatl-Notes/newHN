@@ -285,6 +285,8 @@ main {
   border: 1px solid #ccc;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  overflow-y: auto;
+  max-height: 800px;
   height: auto;
 }
 .events-agenda {
