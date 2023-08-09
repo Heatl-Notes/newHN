@@ -1,4 +1,6 @@
 let isEditingAgenda = false;
+let showAllEvents = false;
+
 const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient() {
@@ -124,23 +126,29 @@ async function deleteEventOnClick(event, date) {
   console.log(`Excluir evento na data: ${date}`);
 }
 
+function toggleShowAllEvents() {
+  showAllEvents = !showAllEvents;
+  closeAgenda();
+}
+
 // TODO: Implementar a função de deletar um paciente
 // TODO: Implementar a filtos
 async function loadEvents() {
-  let currentDate = new Date();
-  let year = currentDate.getFullYear();
-  let month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-  let day = currentDate.getDate();
-  let todaysDate = year + "-" + month + "-" + day;
-
   let localCourrentClient = await globalCourrentClient;
   let events = localCourrentClient?.calendar;
 
-  events = events.filter(function (event) {
-    let date1 = new Date(event.date);
-    let date2 = new Date(todaysDate);
-    return date2 <= date1;
-  });
+  if (!showAllEvents) {
+    events = events.filter(function (event) {
+      let date1 = new Date(event.date);
+      date1.setDate(date1.getDate() + 1); // Adianta um dia
+      let date2 = new Date();
+      // Ignorar a hora, minuto, segundo e milissegundo nas comparações
+      date1.setUTCHours(0, 0, 0, 0);
+      date2.setUTCHours(0, 0, 0, 0);
+
+      return date1 >= date2;
+    });
+  }
 
   events = events.sort(function (eventA, eventB) {
     let date1 = new Date(eventA.date);
@@ -193,11 +201,7 @@ async function loadEvents() {
 }
 
 async function openAgenda() {
-  let popupElemento = document.querySelector(".popup");
-
-  if (popupElemento) {
-    popupElemento.remove();
-  }
+  addPatientPopup.style.display = "none";
 
   let agendaDivName = document.querySelector("#agendaName");
   let localCourrentClient = await globalCourrentClient;
@@ -212,6 +216,11 @@ async function openAgenda() {
       isEditingAgenda = false;
       closeAgenda();
     }
+  });
+
+  const toggleAlleventsButton = document.querySelector("#toggleShowAllEvents");
+  toggleAlleventsButton?.addEventListener("click", () => {
+    toggleShowAllEvents();
   });
 
   loadEvents(); //here I load the events of a client
@@ -286,13 +295,7 @@ async function addEvent(client, date, event) {
 
   if (date in clientCalendar) {
     console.log("date already exists in calendar");
-    // A data já existe no calendário, adiciona o evento à lista de eventos dessa data
-    //clientCalendar[date].push(event);
-  } //else {
-  // A data não existe no calendário, cria a chave e adiciona o evento
-  //clientCalendar[date] = [event];
-  //}
-
+  }
   // Update the client calendar
   fetch(
     `https://health-notes-47645d4f2894.herokuapp.com/patient/schedule/${cpf}`,
@@ -475,6 +478,7 @@ async function editPatient(
 
 //ADD PATIENTS
 
+const agendaDiv = document.querySelector(".popup-agenda");
 const addPatientButton = document.getElementById("addPatientButton");
 const addPatientPopup = document.getElementById("addPatientPopup");
 const closeButton = document.querySelector(".closeButton");
@@ -484,6 +488,7 @@ closeButton.addEventListener("click", () => {
 const confirmButton = document.getElementById("confirmButton");
 
 addPatientButton.addEventListener("click", () => {
+  agendaDiv.style.display = "none";
   addPatientPopup.style.display = "block";
 });
 

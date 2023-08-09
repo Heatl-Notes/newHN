@@ -246,6 +246,7 @@ main {
   border: 1px solid #ccc;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
 }
 
 .popup-edit {
@@ -390,6 +391,33 @@ main {
   padding: 10px;
   top: 0;
   color: white;
+}
+
+.button-filter {
+  width: 97%;
+  border-radius: 10px;
+  background-color: rgba(219, 67, 25, 1);
+  margin-top: 10px;
+  padding: 10px;
+  top: 0;
+  color: white;
+}
+
+.button-pill {
+  border-radius: 10px;
+  background-color: rgba(225, 209, 205);
+  margin-top: 10px;
+  padding: 10px;
+  top: 0;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button-pill:hover {
+  background-color: rgb(222, 127, 103);
+  color: white;
+  transition: 0.3s;
 }
 
 .agenda-input {
