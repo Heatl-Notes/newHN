@@ -8,17 +8,32 @@ const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient() {
   let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
-  let client = await fetch(`${apiUrl}/caregiver/${userCpf}`); //fetch patients from api
-  let clientJson = await client.json();
 
-  return clientJson;
+  let response = await fetch(`${apiUrl}/caregiver/${userCpf}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+
+  let currentCaregiver = await response.json();
+
+  return currentCaregiver;
 }
 
 async function loadPatient(cpf) {
-  let client = await fetch(`${apiUrl}/patient/${cpf}`); //fetch patients from api
-  let patientJson = await client.json();
+  let response = await fetch(`${apiUrl}/patient/${cpf}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
 
-  return patientJson;
+  let patient = await response.json();
+
+  return patient;
 }
 /**
  * This file is responsible for the dashboard page
@@ -61,7 +76,7 @@ async function loadPatients() {
   let patientsJson = await patients.json();
   let innerH = "";
   let cpf = 0;
-  console.log(">>>>>>>>", patientsJson);
+  
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
 
@@ -140,20 +155,28 @@ function toggleShowAllEvents() {
 // TODO: Implementar a função de deletar um paciente
 // TODO: Implementar a filtos
 async function loadEvents(patient) {
-  //let localCourrentClient = await globalCourrentClient;
-  //let patient = await loadPatient(patientCpf);
-  let events = patient?.calendar;
+
+  let patientCpf = patient?.cpf
+
+  let response = await fetch(`${apiUrl}/patient/${patientCpf}/calendar`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+
+  let events = await response.json();
 
   if (!showAllEvents) {
-    events = events.filter(function (event) {
-      let date1 = new Date(event.date);
-      date1.setDate(date1.getDate() + 1); // Adianta um dia
-      let date2 = new Date();
-      // Ignorar a hora, minuto, segundo e milissegundo nas comparações
-      date1.setUTCHours(0, 0, 0, 0);
-      date2.setUTCHours(0, 0, 0, 0);
-
-      return date1 >= date2;
+    let today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+  
+    events = events.filter(event => {
+      let eventDate = new Date(event.date);
+      eventDate.setDate(eventDate.getDate() + 1); // Adianta um dia
+  
+      return eventDate >= today;
     });
   }
 
@@ -194,11 +217,12 @@ async function loadEvents(patient) {
     dateDiv.innerHTML += date;
 
     eventsOnDateDiv.appendChild(dateDiv);
-
+    
     for (let event of eventsOnDate) {
+      console.log(event)
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
-      eventDiv.innerHTML = `<span class="hour">${event.caregiver}</span><span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
+      eventDiv.innerHTML = `<span class="hour">${event.caregiver.name}</span><span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
 
       eventsOnDateDiv.appendChild(eventDiv);
     }
@@ -211,7 +235,8 @@ async function openAgenda(patientCpf) {
   addPatientPopup.style.display = "none";
 
   let agendaDivName = document.querySelector("#agendaName");
-  let currentPatient = loadPatient(patientCpf);
+  let currentPatient = await loadPatient(patientCpf);
+
   agendaDivName.innerHTML = `Agenda de ${currentPatient?.name}`;
 
   let agendaDiv = document.querySelector(".popup-agenda");
@@ -271,7 +296,7 @@ async function openAgenda(patientCpf) {
     };
 
     try {
-      addEvent(currentClient, date, eventObj);
+      addEvent(currentPatient, currentClient, date, eventObj);
     } catch (error) {
       console.log(error);
     }
@@ -286,23 +311,19 @@ function eventParamsCheck(date, event) {
   );
 }
 
-async function addEvent(client, date, event) {
+async function addEvent(patient, client, date, event) {
   if (eventParamsCheck(date, event)) {
     alert("Parametros invalidos! Data e/ou horario vazio(s)");
     return;
   }
 
-  let cpf = client.cpf;
-  let response = await fetch(`${apiUrl}/caregiver/${cpf}`);
-  const clientJson = await response.json();
+  let patientCalendar = patient?.calendar; // obtenho o calendário do paciente
 
-  let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
-
-  if (date in clientCalendar) {
+  if (date in patientCalendar) {
     console.log("date already exists in calendar");
   }
   // Update the client calendar
-  fetch(`${apiUrl}/patient/schedule/${cpf}`, {
+  fetch(`${apiUrl}/patient/${patient.cpf}/schedule`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
