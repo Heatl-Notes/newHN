@@ -1,8 +1,8 @@
 let isEditingAgenda = false;
 let showAllEvents = false;
 
-//let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
-let apiUrl = "http://localhost:8080";
+let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
+// let apiUrl = "http://localhost:8080";
 
 const globalCourrentClient = loadCurrentClient();
 
