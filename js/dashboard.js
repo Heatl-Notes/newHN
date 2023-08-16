@@ -317,7 +317,15 @@ async function addEvent(patient, client, date, event) {
     return;
   }
 
-  let patientCalendar = patient?.calendar; // obtenho o calendário do paciente
+  let response = await fetch(`${apiUrl}/patient/${patient.cpf}/calendar`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+
+  let patientCalendar = await response.json();
 
   if (date in patientCalendar) {
     console.log("date already exists in calendar");
