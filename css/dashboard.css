@@ -385,6 +385,20 @@ main {
   border-radius: 8px;
 }
 
+.agendaButton {
+  cursor: pointer;
+  position: absolute;
+  right: 22%;
+  top: 5%;
+  font-size: 20px;
+  background-color: #343a40;
+  margin: 0;
+  font-weight: bold;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+}
+
 .name-patient-profile {
   border-radius: 10px;
   background-color: rgba(219, 67, 25, 1);

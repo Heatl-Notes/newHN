@@ -1,16 +1,24 @@
 let isEditingAgenda = false;
 let showAllEvents = false;
 
+//let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
+let apiUrl = "http://localhost:8080";
+
 const globalCourrentClient = loadCurrentClient();
 
 async function loadCurrentClient() {
   let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
-  let client = await fetch(
-    `https://health-notes-47645d4f2894.herokuapp.com/caregiver/${userCpf}`
-  ); //fetch patients from api
+  let client = await fetch(`${apiUrl}/caregiver/${userCpf}`); //fetch patients from api
   let clientJson = await client.json();
 
   return clientJson;
+}
+
+async function loadPatient(cpf) {
+  let client = await fetch(`${apiUrl}/patient/${cpf}`); //fetch patients from api
+  let patientJson = await client.json();
+
+  return patientJson;
 }
 /**
  * This file is responsible for the dashboard page
@@ -42,20 +50,18 @@ async function loadPatients() {
   //run the command:json-server --watch db.json (in this directory)
 
   //REAL CODE
-  let patients = await fetch(
-    "https://health-notes-47645d4f2894.herokuapp.com/patient",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
-      },
-    }
-  ); //fetch patients from api
+  let patients = await fetch(`${apiUrl}/patient`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+  //fetch patients from api
   let patientsJson = await patients.json();
   let innerH = "";
   let cpf = 0;
-
+  console.log(">>>>>>>>", patientsJson);
   patientsJson.forEach((patient) => {
     cpf = patient?.cpf;
 
@@ -100,7 +106,7 @@ async function deleteEventOnClick(event, date) {
 
   event.preventDefault();
   const client = await globalCourrentClient; // Obtenha o ID do cliente da maneira adequada
-  const url = `https://health-notes-47645d4f2894.herokuapp.com/clients/${client?.cpf}/calendar/${date}`;
+  const url = `${apiUrl}/clients/${client?.cpf}/calendar/${date}`;
   fetch(url, {
     method: "DELETE",
     headers: {
@@ -133,9 +139,10 @@ function toggleShowAllEvents() {
 
 // TODO: Implementar a função de deletar um paciente
 // TODO: Implementar a filtos
-async function loadEvents() {
-  let localCourrentClient = await globalCourrentClient;
-  let events = localCourrentClient?.calendar;
+async function loadEvents(patient) {
+  //let localCourrentClient = await globalCourrentClient;
+  //let patient = await loadPatient(patientCpf);
+  let events = patient?.calendar;
 
   if (!showAllEvents) {
     events = events.filter(function (event) {
@@ -191,7 +198,7 @@ async function loadEvents() {
     for (let event of eventsOnDate) {
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
-      eventDiv.innerHTML = `<span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
+      eventDiv.innerHTML = `<span class="hour">${event.caregiver}</span><span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
 
       eventsOnDateDiv.appendChild(eventDiv);
     }
@@ -200,12 +207,12 @@ async function loadEvents() {
   }
 }
 
-async function openAgenda() {
+async function openAgenda(patientCpf) {
   addPatientPopup.style.display = "none";
 
   let agendaDivName = document.querySelector("#agendaName");
-  let localCourrentClient = await globalCourrentClient;
-  agendaDivName.innerHTML = `Agenda de ${localCourrentClient?.name}`;
+  let currentPatient = loadPatient(patientCpf);
+  agendaDivName.innerHTML = `Agenda de ${currentPatient?.name}`;
 
   let agendaDiv = document.querySelector(".popup-agenda");
   agendaDiv.style.display = "block";
@@ -223,7 +230,7 @@ async function openAgenda() {
     toggleShowAllEvents();
   });
 
-  loadEvents(); //here I load the events of a client
+  loadEvents(currentPatient); //here I load the events of a client
 
   //capturing the event elements
   let dateElement = document.querySelector("#date");
@@ -286,9 +293,7 @@ async function addEvent(client, date, event) {
   }
 
   let cpf = client.cpf;
-  let response = await fetch(
-    `https://health-notes-47645d4f2894.herokuapp.com/caregiver/${cpf}`
-  );
+  let response = await fetch(`${apiUrl}/caregiver/${cpf}`);
   const clientJson = await response.json();
 
   let clientCalendar = clientJson?.calendar; // obtenho o calendário do cliente
@@ -297,22 +302,19 @@ async function addEvent(client, date, event) {
     console.log("date already exists in calendar");
   }
   // Update the client calendar
-  fetch(
-    `https://health-notes-47645d4f2894.herokuapp.com/patient/schedule/${cpf}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
-      },
-      body: JSON.stringify({
-        date: date,
-        time: event.hour,
-        observation: event.observation,
-        category: event.category,
-      }),
-    }
-  ).then((response) => {
+  fetch(`${apiUrl}/patient/schedule/${cpf}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+    body: JSON.stringify({
+      date: date,
+      time: event.hour,
+      observation: event.observation,
+      category: event.category,
+    }),
+  }).then((response) => {
     if (response.status === 200) {
       alert("Evento adicionado com sucesso!"); //to the user
       console.log("Calendário atualizado"); //to the developer
@@ -357,6 +359,7 @@ function showPatientProfile(patient) {
   popupElemento.innerHTML = `
       <span class="closeButton">X</span>
       <span class="editButton">EDITAR</span>
+      <span class="agendaButton">AGENDA</span>
       <h1 class="name-patient-profile">Sr(a) ${name}</h1>
       <div class=patient-info>
         <h3><u>CPF</u>: ${cpf}</h3>
@@ -370,11 +373,18 @@ function showPatientProfile(patient) {
   document.body.appendChild(popupElemento);
 
   const editButton = popupElemento.querySelector(".editButton");
+  const agendaButton = popupElemento.querySelector(".agendaButton");
   const closeButton = popupElemento.querySelector(".closeButton");
   const editPopup = document.createElement("div");
   editPopup.className = "popup-edit";
 
   popupElemento.appendChild(editPopup);
+
+  agendaButton.addEventListener("click", () => {
+    popupElemento.remove();
+    openAgenda(cpf); //TODO: fazer abrir agenda do paciente, aquin esta abrindo a agenda do cuidador.
+    //talvez criar um metodo identido so que usando o cpf do paciente e usando o endpoint adequado
+  });
 
   closeButton.addEventListener("click", () => {
     popupElemento.remove();
@@ -456,17 +466,14 @@ async function editPatient(
     complexProcedures: complexProceduresList,
   };
 
-  const editedPatient = await fetch(
-    `https://health-notes-47645d4f2894.herokuapp.com/patient`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
-      },
-      body: JSON.stringify(patientUpdated),
-    }
-  );
+  const editedPatient = await fetch(`${apiUrl}/patient`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+    body: JSON.stringify(patientUpdated),
+  });
   if (editedPatient.status === 200) {
     alert("O paciente foi atualizado com sucesso!");
     window.location.reload();
@@ -535,32 +542,26 @@ async function addPatient(cpf, name, age, comorbidities, complexProcedures) {
   };
 
   try {
-    const alreadyRegistered = await fetch(
-      `https://health-notes-47645d4f2894.herokuapp.com/patient/${cpf}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-      }
-    );
-    if (alreadyRegistered.status === 200) {
-      alert("Um paciente com o mesmo CPF já está cadastrado!");
-      return; // Retorna sem adicionar o paciente, encontrou um com o mesmo CPF
-    }
+    // const alreadyRegistered = await fetch(`${apiUrl}/patient/${cpf}`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: localStorage.getItem("token"),
+    //   },
+    // });
+    // if (alreadyRegistered.status === 200) {
+    //   alert("Um paciente com o mesmo CPF já está cadastrado!");
+    //   return; // Retorna sem adicionar o paciente, encontrou um com o mesmo CPF
+    // }
 
-    const response = await fetch(
-      "https://health-notes-47645d4f2894.herokuapp.com/patient",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(newPatient),
-      }
-    );
+    const response = await fetch(`${apiUrl}/patient`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+      body: JSON.stringify(newPatient),
+    });
 
     if (response.ok) {
       // If the patient was added successfully
@@ -586,16 +587,13 @@ function deletePatientOnClick(event, cpf) {
 async function deletePatient(cpfToDelete) {
   try {
     // Verificar se o paciente existe antes de excluir
-    const response = await fetch(
-      `https://health-notes-47645d4f2894.herokuapp.com/patient/${cpfToDelete}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-      }
-    );
+    const response = await fetch(`${apiUrl}/patient/${cpfToDelete}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    });
     const patientJson = await response.json();
     const patientCpf = patientJson.cpf; // Supondo que a API retorna um campo "id" para cada paciente
 
@@ -605,17 +603,14 @@ async function deletePatient(cpfToDelete) {
     }
 
     // Excluir o paciente caso seja encontrado
-    const deleteResponse = await fetch(
-      `https://health-notes-47645d4f2894.herokuapp.com/patient/${patientCpf}`,
-      {
-        method: "DELETE",
-        body: JSON.stringify({ cpf: patientCpf }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-      }
-    );
+    const deleteResponse = await fetch(`${apiUrl}/patient/${patientCpf}`, {
+      method: "DELETE",
+      body: JSON.stringify({ cpf: patientCpf }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    });
 
     if (deleteResponse.ok) {
       loadPatients(); // Recarrega a lista de pacientes após a exclusão
