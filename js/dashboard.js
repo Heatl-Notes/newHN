@@ -1,8 +1,8 @@
 let isEditingAgenda = false;
 let showAllEvents = false;
 
-let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
-// let apiUrl = "http://localhost:8080";
+// let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
+let apiUrl = "http://localhost:8080";
 
 const globalCourrentClient = loadCurrentClient();
 
@@ -58,6 +58,8 @@ buttons.forEach((button) => {
 
 async function loadPatients() {
   closeAgenda();
+  addPatientButton.style.display = "block"
+
   var main = document.querySelector(".main-content");
   main.innerHTML = "";
 
@@ -93,8 +95,16 @@ async function loadPatients() {
       dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
     }
 
-    innerH = `<h3>Nome:  ${patient.name} </h3> 
-      <p id="dot-label  "><strong>Doenças crônicas:</strong> ${dotElementComorbitities} </p><p id="dot-label  "><strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} </p><span><strong>Idade: ${patient.age} </strong> </span> <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+    innerH = `
+      <h3>Nome:  ${patient.name} </h3> 
+      <p id="dot-label  ">
+        <strong>Doenças crônicas:</strong> ${dotElementComorbitities} </p>
+      <p id="dot-label  ">
+        <strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} 
+      </p>
+        <span><strong>Idade: ${patient.age} </strong></span> 
+        <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
     novoElemento.innerHTML = innerH;
@@ -106,6 +116,40 @@ async function loadPatients() {
     main.appendChild(novoElemento);
   });
 }
+
+
+async function loadProfile() {
+  closeAgenda();
+
+  addPatientButton.style.display = "none"
+
+  var main = document.querySelector(".main-content");
+  main.innerHTML = "";
+
+  //REAL CODE
+  let currentClient = await loadCurrentClient();
+  let innerH = "";
+  let cpf = 0;
+  
+  var novoElemento = document.createElement("div");
+  innerH = `
+  <h1>Perfil do Cuidador</h1>
+  <h3>Nome:  ${currentClient.name} </h3> 
+  <p id="dot-label  ">
+    <strong>Sobrenome:</strong> ${currentClient.lastname} </p>
+  <p id="dot-label  ">
+    <strong>Cpf:</strong> ${currentClient.cpf} 
+  </p>`;
+    // <span><strong>Idade: ${patient.age} </strong></span> 
+    // <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;   
+
+
+  main.innerHTML = innerH;
+
+
+  main.appendChild(novoElemento);
+}
+
 
 function closeAgenda() {
   let agendaDiv = document.querySelector(".popup-agenda");
@@ -199,6 +243,8 @@ async function loadEvents(patient) {
   for (let i in events) {
     let date = events[i].date;
     let eventsOnDate = events[i].schedules;
+
+    console.log(events);
     eventsOnDate = eventsOnDate.sort(function (eventA, eventB) {
       if (eventA.time < eventB.time) {
         return -1;
@@ -208,6 +254,7 @@ async function loadEvents(patient) {
         return 0;
       }
     });
+
     let eventsOnDateDiv = document.createElement("div");
     eventsOnDateDiv.className = "events-on-date";
 
@@ -219,7 +266,7 @@ async function loadEvents(patient) {
     eventsOnDateDiv.appendChild(dateDiv);
     
     for (let event of eventsOnDate) {
-      console.log(event)
+      // console.log(event)
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
       eventDiv.innerHTML = `<span class="hour">${event.caregiver.name}</span><span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
@@ -229,6 +276,7 @@ async function loadEvents(patient) {
 
     eventsDiv.appendChild(eventsOnDateDiv);
   }
+
 }
 
 async function openAgenda(patientCpf) {
