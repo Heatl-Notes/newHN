@@ -97,12 +97,12 @@ async function loadPatients() {
     let dotElementComplexprocedures = `<span id="dot-label" class="green-dot"></span> (NÃO PRECISA)`;
 
     let patientComorbidities = patient.comorbidities;
-    if (patientComorbidities[0].description !== "") {
+    if (patientComorbidities.length > 0 && patientComorbidities[0].description !== "") {
       dotElementComorbitities = `<span id="dot" class="red-dot"></span> (POSSUI)`;
     }
 
     let patientProcedures = patient.complexProcedures;
-    if (patientProcedures[0].description !== "") {
+    if (patientProcedures.length > 0 && patientProcedures[0].description !== "") {
       dotElementComplexprocedures = `<span id="dot" class="red-dot"></span> (PRECISA)`;
     }
 
