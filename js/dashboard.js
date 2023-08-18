@@ -1,10 +1,21 @@
+// ESPAÇO PARA VARIÁVEIS E CONSTANTES
+
+const agendaDiv = document.querySelector(".popup-agenda");
+const addPatientButton = document.getElementById("addPatientButton");
+const addPatientPopup = document.getElementById("addPatientPopup");
+const closeButton = document.querySelector(".closeButton");
+
 let isEditingAgenda = false;
 let showAllEvents = false;
 
-// let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
-let apiUrl = "http://localhost:8080";
+let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
+// let apiUrl = "http://localhost:8080";
 
 const globalCourrentClient = loadCurrentClient();
+
+// FIM
+
+
 
 async function loadCurrentClient() {
   let userCpf = localStorage.getItem("userCpf"); //capturando o ID do usuario logado
@@ -562,10 +573,7 @@ async function editPatient(
 
 //ADD PATIENTS
 
-const agendaDiv = document.querySelector(".popup-agenda");
-const addPatientButton = document.getElementById("addPatientButton");
-const addPatientPopup = document.getElementById("addPatientPopup");
-const closeButton = document.querySelector(".closeButton");
+
 closeButton.addEventListener("click", () => {
   addPatientPopup.style.display = "none";
 });

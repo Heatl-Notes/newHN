@@ -5,8 +5,8 @@
 /*
 LOGIN
 */
-// let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
-let apiUrl = "http://localhost:8080";
+let apiUrl = "https://health-notes-47645d4f2894.herokuapp.com";
+// let apiUrl = "http://localhost:8080";
 
 function showLoadingIndicator() {
   const loadingIndicator = document.getElementById("loading-indicator");
