@@ -371,7 +371,7 @@ main {
   border-radius: 8px;
 }
 
-.editButton {
+.removePatientButton {
   cursor: pointer;
   position: absolute;
   right: 8%;
@@ -385,10 +385,24 @@ main {
   border-radius: 8px;
 }
 
+.editButton {
+  cursor: pointer;
+  position: absolute;
+  right: 25%;
+  top: 5%;
+  font-size: 20px;
+  background-color: #343a40;
+  margin: 0;
+  font-weight: bold;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+}
+
 .agendaButton {
   cursor: pointer;
   position: absolute;
-  right: 22%;
+  right: 38.5%;
   top: 5%;
   font-size: 20px;
   background-color: #343a40;

@@ -456,8 +456,10 @@ function showPatientProfile(patient) {
   popupElemento.className = "popup";
   popupElemento.innerHTML = `
       <span class="closeButton">X</span>
+      
       <span class="editButton">EDITAR</span>
       <span class="agendaButton">AGENDA</span>
+      <span class="removePatientButton">REMOVER</span>
       <h1 class="name-patient-profile">Sr(a) ${name}</h1>
       <div class=patient-info>
         <h3><u>CPF</u>: ${cpf}</h3>
@@ -472,6 +474,7 @@ function showPatientProfile(patient) {
 
   const editButton = popupElemento.querySelector(".editButton");
   const agendaButton = popupElemento.querySelector(".agendaButton");
+  const removePatientButton = popupElemento.querySelector(".removePatientButton");
   const closeButton = popupElemento.querySelector(".closeButton");
   const editPopup = document.createElement("div");
   editPopup.className = "popup-edit";
@@ -486,6 +489,10 @@ function showPatientProfile(patient) {
 
   closeButton.addEventListener("click", () => {
     popupElemento.remove();
+  });
+
+  removePatientButton.addEventListener("click", () => {
+    removePatient(patient);
   });
 
   editButton.addEventListener("click", () => {
@@ -536,6 +543,25 @@ function showPatientProfile(patient) {
       );
     });
   });
+}
+
+async function removePatient(patient) {
+  let currentClient = await loadCurrentClient();
+
+  const removePatient = await fetch(`${apiUrl}/caregiver/${currentClient.cpf}/patient/${patient.cpf}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    }
+  });
+  if (removePatient.status === 200) {
+    alert("O paciente foi removido com sucesso!");
+    window.location.reload();
+    return; // ends the function
+  } else {
+    alert("Ocorreu um erro ao remover o paciente");
+  }
 }
 
 async function editPatient(
