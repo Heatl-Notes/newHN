@@ -287,18 +287,42 @@ async function loadEvents(patient) {
     eventsOnDateDiv.appendChild(dateDiv);
     
     for (let event of eventsOnDate) {
-      // console.log(event)
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
-      eventDiv.innerHTML = `<span class="hour">${event.caregiver.name}</span><span class="hour">${event.time}</span><span class="observation">${event.observation}</span><span class="category">${event.category}</span>`;
-
+      eventDiv.innerHTML = `
+        <span class="hour">${event.caregiver.name}</span>
+        <span class="hour">${event.time}</span>
+        <span class="observation">${event.observation}</span>
+        <span class="category">${event.category}</span>
+        <button class="delete-button" data-event-id="${event.id}">Deletar</button>
+      `;
+    
       eventsOnDateDiv.appendChild(eventDiv);
     }
-
+  
     eventsDiv.appendChild(eventsOnDateDiv);
-  }
 
+
+    eventsOnDateDiv.addEventListener("click", (event) => {
+      if (event.target.classList.contains("delete-button")) {
+        const eventId = event.target.getAttribute("data-event-id");
+        deleteEvent(eventId);
+      }
+    });
+  }
 }
+
+async function deleteEvent(eventId) {
+  let response = await fetch(`${apiUrl}/schedules/${eventId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+}
+
+
 
 async function openAgenda(patientCpf) {
   addPatientPopup.style.display = "none";
