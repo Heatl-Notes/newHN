@@ -117,8 +117,8 @@ async function loadPatients() {
       <p id="dot-label  ">
         <strong>Procedimentos especializados:</strong> ${dotElementComplexprocedures} 
       </p>
-        <span><strong>Idade: ${patient.age} </strong></span> 
-        <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
+        <span><strong>Idade: ${patient.age} </strong></span>`; 
+        // <button id="delete-buttom-patient-card"onclick="deletePatientOnClick(event,${cpf})">EXCLUIR</button>`;
 
     var novoElemento = document.createElement("div");
     novoElemento.className = "patient-card";
@@ -287,6 +287,7 @@ async function loadEvents(patient) {
     eventsOnDateDiv.appendChild(dateDiv);
 
     for (let event of eventsOnDate) {
+      console.log(typeof date)
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
       eventDiv.innerHTML = `
@@ -302,25 +303,30 @@ async function loadEvents(patient) {
 
     eventsDiv.appendChild(eventsOnDateDiv);
 
-    // eventsOnDateDiv.addEventListener("click", (event) => {
-    //   if (event.target.classList.contains("delete-button")) {
-    //     const eventId = event.target.getAttribute("data-event-id");
-    //     deleteEvent(eventId);
-    //   }
-    // });
   }
 }
 
-async function deleteEvent(date, eventId) {
-  alert(date);
-  alert(eventId);
-  // let response = await fetch(`${apiUrl}/schedules/${eventId}`, {
-  //   method: "DELETE",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: localStorage.getItem("token"),
-  //   },
-  // });
+async function deleteEvent(calendarId, eventId) {
+ try{
+  let response = await fetch(`${apiUrl}/calendar/${calendarId}/schedule/${eventId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+
+  if (response.status === 204) {
+
+    alert("Evento excluído com sucesso!");
+    window.location = "dashboard.html";
+  } else {
+    alert("Erro ao excluir evento:", response.status);
+    window.location = "dashboard.html";
+  }
+} catch (error) {
+  console.log("Ocorreu um erro na solicitação:", error);
+}
 }
 
 async function openAgenda(patientCpf) {
@@ -409,21 +415,8 @@ async function addEvent(patient, client, date, event) {
     return;
   }
 
-  let response = await fetch(`${apiUrl}/patient/${patient.cpf}/calendar`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-  });
-
-  let patientCalendar = await response.json();
-
-  if (date in patientCalendar) {
-    console.log("date already exists in calendar");
-  }
   // Update the client calendar
-  fetch(`${apiUrl}/patient/${patient.cpf}/schedule`, {
+  let response = await fetch(`${apiUrl}/patient/${patient.cpf}/schedule`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
