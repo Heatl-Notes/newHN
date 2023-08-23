@@ -151,7 +151,7 @@ main {
   background-color: rgb(245, 229, 226);
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 15px;
+  border-radius: 10px;
   font-size: 20px;
 }
 .delete-event-button {
@@ -311,7 +311,7 @@ main {
 
 .events-agenda {
   margin-top: 15px;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: rgba(219, 67, 25, 1);
   padding: 10px;
   top: 0;
@@ -425,7 +425,7 @@ main {
   width: 97%;
   border-radius: 10px;
   background-color: rgba(219, 67, 25, 1);
-  margin-top: 10px;
+  margin-bottom: 10px;
   padding: 10px;
   top: 0;
   color: white;
@@ -434,7 +434,7 @@ main {
 .button-pill {
   border-radius: 10px;
   background-color: rgba(225, 209, 205);
-  margin-top: 10px;
+  margin-bottom: 10px;
   padding: 10px;
   top: 0;
   color: black;
@@ -598,8 +598,8 @@ nav {
   cursor: pointer;
 }
 .tooltip .tooltiptext {
-  border: 2px solid black; /* Define a borda com 2px de largura e cor preta */
-  font-weight: bold; /* Torna o texto em negrito */
+  border: 2px solid black;
+  font-weight: bold;
   visibility: visible;
   width: 200px;
   height: 100px;
@@ -619,19 +619,13 @@ nav {
   overflow: auto;
 }
 
-
-
-
-
-
-/* Add this to your existing CSS or in a separate file */
 .profile-container {
   background-color: #f8f8f8;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 100%; /* Ocupar toda a largura disponível */
-  max-width: 600px; /* Definir uma largura máxima para evitar que fique muito largo */
+  width: 100%;
+  max-width: 600px;
 }
 
 .profile-header {
@@ -645,7 +639,7 @@ nav {
 }
 
 .profile-image {
-  width: 150px; /* Adjust the size as needed */
+  width: 150px;
   height: 150px;
   border-radius: 50%;
   margin-top: 20px;
@@ -661,10 +655,42 @@ nav {
 }
 
 .profile-details p {
-  font-size: 16px;
+  border-color: rgb(17, 2, 2);
+  font-size: 20px;
   margin: 5px 0;
+  background-color: rgb(245, 182, 182);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 10px;
 }
 
-/* You can add more styling to enhance the appearance */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
 
+.profile-header h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
 
+.profile-image {
+  border: 1px solid #e86666;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.profile-details {
+  text-align: center;
+}
