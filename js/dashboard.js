@@ -232,7 +232,7 @@ async function loadEvents(patient) {
   });
 
   let events = await response.json();
-
+  console.log(events)
   if (!showAllEvents) {
     let today = new Date();
     today.setUTCHours(0, 0, 0, 0);
@@ -287,11 +287,11 @@ async function loadEvents(patient) {
     eventsOnDateDiv.appendChild(dateDiv);
 
     for (let event of eventsOnDate) {
-      console.log(typeof date)
+      let currentCaregiver = await loadCurrentClient(event.caregiverId);
       let eventDiv = document.createElement("div");
       eventDiv.className = "event";
       eventDiv.innerHTML = `
-        <span class="hour">${event.caregiver.name}</span>
+        <span class="hour">${currentCaregiver.name}</span>
         <span class="hour">${event.time}</span>
         <span class="observation">${event.observation}</span>
         <span class="category">${event.category}</span>
